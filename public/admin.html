@@ -10,29 +10,21 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
         :root {
-            --primary: #7c3aed;
-            --primary-dark: #6d28d9;
-            --secondary: #10b981;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-            --info: #3b82f6;
-            
-            --dark-bg: #0f172a;
-            --dark-card: #1e293b;
-            --dark-border: #334155;
-            --dark-text: #f1f5f9;
-            --dark-text-secondary: #94a3b8;
-            
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --radius: 0.5rem;
-            --radius-lg: 0.75rem;
+            --primary: #007AFF;
+            --primary-dark: #0056CC;
+            --secondary: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --dark-bg: #0B0B0B;
+            --dark-card: #1C1C1E;
+            --dark-border: #3A3A3C;
+            --dark-text: #FFFFFF;
+            --dark-text-secondary: #8E8E93;
+            --radius: 12px;
             --transition: all 0.3s ease;
         }
 
@@ -48,10 +40,110 @@
             padding: 20px;
         }
 
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+        }
+
+        .login-box {
+            background: var(--dark-card);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-top: 4px solid var(--primary);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--dark-text-secondary);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--dark-border);
+            border-radius: var(--radius);
+            color: var(--dark-text);
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            color: var(--danger);
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
         .admin-header {
             background: var(--dark-card);
             padding: 24px;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
@@ -60,45 +152,45 @@
         }
 
         .admin-title {
-            font-size: 2rem;
+            font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .admin-nav {
+        .admin-actions {
             display: flex;
             gap: 12px;
         }
 
-        .admin-nav-btn {
+        .admin-btn {
             padding: 10px 20px;
-            background: rgba(124, 58, 237, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.3);
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
             border-radius: var(--radius);
             color: var(--dark-text);
             cursor: pointer;
             font-weight: 500;
-            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: var(--transition);
         }
 
-        .admin-nav-btn:hover {
-            background: rgba(124, 58, 237, 0.2);
+        .admin-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
             transform: translateY(-2px);
         }
 
-        .admin-nav-btn.logout {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
+        .admin-btn.logout {
+            background: rgba(255, 59, 48, 0.1);
+            border-color: rgba(255, 59, 48, 0.3);
         }
 
-        .admin-nav-btn.logout:hover {
-            background: rgba(239, 68, 68, 0.2);
+        .admin-btn.logout:hover {
+            background: rgba(255, 59, 48, 0.2);
         }
 
         /* Stats Grid */
@@ -112,7 +204,7 @@
         .stat-card {
             background: var(--dark-card);
             padding: 24px;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             border-left: 4px solid var(--primary);
             transition: var(--transition);
             cursor: pointer;
@@ -120,67 +212,76 @@
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .stat-card.users { border-left-color: var(--info); }
-        .stat-card.chats { border-left-color: var(--success); }
-        .stat-card.active { border-left-color: var(--accent); }
-        .stat-card.today { border-left-color: var(--primary); }
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 36px;
             font-weight: 800;
             margin-bottom: 8px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card.users .stat-number { 
-            background: linear-gradient(45deg, var(--info), #3b82f6);
-            -webkit-background-clip: text;
-        }
-        .stat-card.chats .stat-number { 
-            background: linear-gradient(45deg, var(--success), #10b981);
-            -webkit-background-clip: text;
-        }
-        .stat-card.active .stat-number { 
-            background: linear-gradient(45deg, var(--accent), #f59e0b);
-            -webkit-background-clip: text;
         }
 
         .stat-label {
             color: var(--dark-text-secondary);
-            font-size: 0.875rem;
+            font-size: 14px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--dark-border);
+            padding-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--dark-text-secondary);
             font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
-            opacity: 0.7;
+        .tab-btn.active {
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--primary);
         }
 
-        /* Users Table */
-        .users-section {
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Tables */
+        .table-container {
             background: var(--dark-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             overflow: hidden;
             margin-bottom: 32px;
         }
 
-        .section-header {
-            padding: 20px 24px;
+        .table-header {
+            padding: 20px;
             border-bottom: 1px solid var(--dark-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .section-title {
-            font-size: 1.25rem;
+        .table-title {
+            font-size: 18px;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -199,7 +300,7 @@
             border: 1px solid var(--dark-border);
             border-radius: var(--radius);
             color: var(--dark-text);
-            font-size: 0.875rem;
+            font-size: 14px;
         }
 
         .search-input:focus {
@@ -215,232 +316,254 @@
             color: var(--dark-text-secondary);
         }
 
-        .table-container {
-            overflow-x: auto;
-        }
-
-        .users-table {
+        .table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .users-table th {
-            background: rgba(124, 58, 237, 0.1);
+        .table th {
+            background: rgba(0, 122, 255, 0.1);
             padding: 16px;
             text-align: left;
             font-weight: 600;
-            color: var(--dark-text);
-            font-size: 0.875rem;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .users-table td {
+        .table td {
             padding: 16px;
             border-bottom: 1px solid var(--dark-border);
-            font-size: 0.875rem;
+            font-size: 14px;
         }
 
-        .users-table tr:hover {
+        .table tr:hover {
             background: rgba(255, 255, 255, 0.03);
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 0.875rem;
+            font-size: 14px;
         }
 
         .badge {
             padding: 4px 8px;
-            border-radius: var(--radius);
-            font-size: 0.75rem;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
             display: inline-block;
         }
 
         .badge.admin {
-            background: rgba(124, 58, 237, 0.2);
+            background: rgba(0, 122, 255, 0.2);
             color: var(--primary);
         }
 
         .badge.user {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--info);
+            background: rgba(52, 199, 89, 0.2);
+            color: var(--secondary);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
         }
 
         .action-btn {
             padding: 6px 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--dark-border);
-            border-radius: var(--radius);
+            border-radius: 6px;
             color: var(--dark-text);
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 12px;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .action-btn:hover {
-            background: rgba(124, 58, 237, 0.2);
+            background: rgba(0, 122, 255, 0.1);
             border-color: var(--primary);
         }
 
+        .action-btn.view {
+            background: rgba(52, 199, 89, 0.1);
+            border-color: rgba(52, 199, 89, 0.3);
+        }
+
         .action-btn.edit {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(255, 149, 0, 0.1);
+            border-color: rgba(255, 149, 0, 0.3);
         }
 
         .action-btn.delete {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(255, 59, 48, 0.1);
+            border-color: rgba(255, 59, 48, 0.3);
         }
 
-        .action-btn.delete:hover {
-            background: rgba(239, 68, 68, 0.2);
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            display: none;
         }
 
-        /* Admin Settings */
-        .settings-section {
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
             background: var(--dark-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 32px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .settings-grid {
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--dark-text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* User Details */
+        .user-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-            margin-top: 20px;
         }
 
-        .setting-card {
+        .detail-card {
             background: rgba(255, 255, 255, 0.03);
             padding: 20px;
             border-radius: var(--radius);
             border: 1px solid var(--dark-border);
         }
 
-        .setting-title {
-            font-size: 1rem;
+        .detail-title {
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 16px;
-            color: var(--dark-text);
+            color: var(--primary);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .form-group {
-            margin-bottom: 16px;
+        .detail-item {
+            margin-bottom: 12px;
         }
 
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
+        .detail-label {
+            font-size: 14px;
             color: var(--dark-text-secondary);
-            font-size: 0.875rem;
+            margin-bottom: 4px;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--dark-border);
-            border-radius: var(--radius);
-            color: var(--dark-text);
-            font-size: 0.875rem;
+        .detail-value {
+            font-size: 16px;
+            font-weight: 500;
+            word-break: break-all;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .save-btn {
-            padding: 10px 24px;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        /* Login Page */
-        .login-container {
+        /* Conversation Messages */
+        .messages-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--dark-bg), #1e293b);
+            flex-direction: column;
+            gap: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
-        .login-box {
-            background: var(--dark-card);
-            padding: 48px;
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--shadow-lg);
-            border-top: 4px solid var(--primary);
+        .message-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
         }
 
-        .login-header {
-            text-align: center;
-            margin-bottom: 32px;
+        .message-item.user {
+            border-left-color: var(--secondary);
         }
 
-        .login-logo {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-        }
-
-        .login-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .message-header {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 8px;
         }
 
-        .login-subtitle {
+        .message-role {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .message-time {
+            font-size: 12px;
             color: var(--dark-text-secondary);
-            font-size: 0.875rem;
         }
 
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: var(--danger);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            margin-bottom: 20px;
-            font-size: 0.875rem;
-            display: none;
-        }
-
-        .success-message {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--success);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            margin-bottom: 20px;
-            font-size: 0.875rem;
-            display: none;
+        .message-content {
+            line-height: 1.6;
         }
 
         /* Loading */
@@ -450,19 +573,23 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 10001;
             display: none;
+        }
+
+        .loading-overlay.active {
+            display: flex;
         }
 
         .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 3px solid rgba(124, 58, 237, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border-top-color: var(--primary);
             animation: spin 1s linear infinite;
@@ -470,59 +597,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 20px;
-            display: none;
-        }
-
-        .modal-content {
-            background: var(--dark-card);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--dark-text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Responsive */
@@ -539,7 +613,7 @@
                 text-align: center;
             }
             
-            .admin-nav {
+            .admin-actions {
                 width: 100%;
                 justify-content: center;
                 flex-wrap: wrap;
@@ -549,38 +623,41 @@
                 grid-template-columns: 1fr;
             }
             
-            .search-box {
-                width: 100%;
-                margin-top: 16px;
-            }
-            
-            .section-header {
+            .table-header {
                 flex-direction: column;
                 gap: 16px;
             }
             
-            .login-box {
-                padding: 32px 24px;
+            .search-box {
+                width: 100%;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+            
+            .tab-btn {
+                white-space: nowrap;
             }
         }
 
         @media (max-width: 480px) {
             .admin-container {
-                padding: 12px;
+                padding: 10px;
             }
             
-            .admin-nav-btn {
-                padding: 8px 16px;
-                font-size: 0.875rem;
+            .login-box {
+                padding: 30px 20px;
             }
             
-            .users-table {
-                font-size: 0.75rem;
+            .action-btns {
+                flex-direction: column;
             }
             
-            .users-table th,
-            .users-table td {
-                padding: 12px 8px;
+            .action-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -591,7 +668,7 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- Admin Login -->
+    <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-box">
             <div class="login-header">
@@ -602,51 +679,47 @@
                 <p class="login-subtitle">Sila AI Management System</p>
             </div>
             
-            <div class="error-message" id="loginError"></div>
-            <div class="success-message" id="loginSuccess"></div>
+            <div class="error-message" id="errorMessage"></div>
             
-            <form id="adminLoginForm">
+            <form id="loginForm">
                 <div class="form-group">
                     <label class="form-label">Admin PIN</label>
-                    <input type="password" id="adminPin" class="form-control" placeholder="Weka pini ya admin" required>
+                    <input type="password" id="adminPin" class="form-control" placeholder="Weka pini ya admin (sila0022)" required>
                 </div>
-                <button type="submit" class="save-btn" style="width: 100%; margin-top: 16px;">
-                    Ingia kwenye Admin Panel
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Ingia
                 </button>
             </form>
             
             <div style="text-align: center; margin-top: 24px;">
-                <a href="/" style="color: var(--primary); text-decoration: none; font-size: 0.875rem;">
+                <a href="/" style="color: var(--primary); text-decoration: none; font-size: 14px;">
                     <i class="fas fa-arrow-left"></i> Rudi kwenye Sila AI
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
-    <div id="dashboardPage" style="display: none;">
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="dashboard">
         <div class="admin-container">
             <div class="admin-header">
                 <div>
                     <h1 class="admin-title">Sila AI Admin Panel</h1>
-                    <p style="color: var(--dark-text-secondary); margin-top: 4px;">Huduma za udhibiti na usimamizi</p>
+                    <p style="color: var(--dark-text-secondary); margin-top: 4px;">Udhibiti kamili wa mfumo</p>
                 </div>
-                <div class="admin-nav">
-                    <button class="admin-nav-btn" onclick="refreshStats()">
+                <div class="admin-actions">
+                    <button class="admin-btn" onclick="refreshData()">
                         <i class="fas fa-sync-alt"></i> Sasisha
                     </button>
-                    <button class="admin-nav-btn" onclick="openSettings()">
-                        <i class="fas fa-cog"></i> Mipangilio
-                    </button>
-                    <button class="admin-nav-btn logout" onclick="logoutAdmin()">
+                    <button class="admin-btn logout" onclick="logoutAdmin()">
                         <i class="fas fa-sign-out-alt"></i> Toka
                     </button>
                 </div>
             </div>
 
-            <!-- Stats Grid -->
+            <!-- Stats -->
             <div class="stats-grid">
-                <div class="stat-card users">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
@@ -654,7 +727,7 @@
                     <div class="stat-label">Watumiaji Wote</div>
                 </div>
                 
-                <div class="stat-card chats">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-comments"></i>
                     </div>
@@ -662,7 +735,7 @@
                     <div class="stat-label">Mazungumzo</div>
                 </div>
                 
-                <div class="stat-card active">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-user-check"></i>
                     </div>
@@ -670,7 +743,7 @@
                     <div class="stat-label">Watumiaji Wenye Uhai</div>
                 </div>
                 
-                <div class="stat-card today">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-calendar-day"></i>
                     </div>
@@ -679,164 +752,163 @@
                 </div>
             </div>
 
-            <!-- Users Table -->
-            <div class="users-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-user-friends"></i>
-                        Orodha ya Watumiaji
-                    </h2>
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="userSearch" class="search-input" placeholder="Tafuta mtumiaji...">
-                    </div>
-                </div>
-                
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('users')">
+                    <i class="fas fa-users"></i> Watumiaji
+                </button>
+                <button class="tab-btn" onclick="showTab('conversations')">
+                    <i class="fas fa-comments"></i> Mazungumzo
+                </button>
+                <button class="tab-btn" onclick="showTab('settings')">
+                    <i class="fas fa-cog"></i> Mipangilio
+                </button>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="usersTab" class="tab-content">
                 <div class="table-container">
-                    <table class="users-table">
-                        <thead>
-                            <tr>
-                                <th>Mtumiaji</th>
-                                <th>Barua Pepe</th>
-                                <th>Lugha</th>
-                                <th>Tarehe ya Kujiunga</th>
-                                <th>Hadhi</th>
-                                <th>Vitendo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Users will be loaded here -->
-                        </tbody>
-                    </table>
+                    <div class="table-header">
+                        <h2 class="table-title">
+                            <i class="fas fa-user-friends"></i>
+                            Orodha ya Watumiaji
+                        </h2>
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="userSearch" class="search-input" placeholder="Tafuta mtumiaji...">
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mtumiaji</th>
+                                    <th>Email</th>
+                                    <th>Lugha</th>
+                                    <th>Tarehe ya Kujiunga</th>
+                                    <th>Hadhi</th>
+                                    <th>Vitendo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Settings Section -->
-            <div id="settingsSection" class="settings-section" style="display: none;">
-                <h2 class="section-title">
-                    <i class="fas fa-sliders-h"></i>
-                    Mipangilio ya Admin
-                </h2>
-                
-                <div class="settings-grid">
-                    <div class="setting-card">
-                        <h3 class="setting-title">
-                            <i class="fas fa-key"></i>
-                            Badilisha Pini ya Admin
-                        </h3>
-                        <div class="form-group">
-                            <label class="form-label">Pini Mpya</label>
-                            <input type="password" id="newAdminPin" class="form-control" placeholder="Weka pini mpya">
+            <!-- Conversations Tab -->
+            <div id="conversationsTab" class="tab-content" style="display: none;">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2 class="table-title">
+                            <i class="fas fa-comments"></i>
+                            Mazungumzo Yote
+                        </h2>
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="conversationSearch" class="search-input" placeholder="Tafuta mazungumzo...">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Thibitisha Pini</label>
-                            <input type="password" id="confirmAdminPin" class="form-control" placeholder="Weka pini tena">
-                        </div>
-                        <button class="save-btn" onclick="updateAdminPin()">
-                            <i class="fas fa-save"></i> Hifadhi Pini Mpya
-                        </button>
                     </div>
-                    
-                    <div class="setting-card">
-                        <h3 class="setting-title">
-                            <i class="fas fa-robot"></i>
-                            Mipangilio ya AI
-                        </h3>
-                        <div class="form-group">
-                            <label class="form-label">Jina la AI</label>
-                            <input type="text" id="aiName" class="form-control" value="Sila AI">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Tabia ya AI</label>
-                            <textarea id="aiPersonality" class="form-control" rows="3">Ninasema Kiswahili na Kiingereza, ni msaidizi wenye uelewa mkuu, mwenye huruma na ufasaha.</textarea>
-                        </div>
-                        <button class="save-btn" onclick="updateAISettings()">
-                            <i class="fas fa-save"></i> Hifadhi Mipangilio
-                        </button>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mtumiaji</th>
+                                    <th>Session ID</th>
+                                    <th>Ujumbe</th>
+                                    <th>Muda wa Mwisho</th>
+                                    <th>Vitendo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="conversationsTable">
+                                <!-- Conversations will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
-                    
-                    <div class="setting-card">
-                        <h3 class="setting-title">
-                            <i class="fas fa-server"></i>
-                            API Endpoints
-                        </h3>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content" style="display: none;">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2 class="table-title">
+                            <i class="fas fa-cog"></i>
+                            Mipangilio ya Mfumo
+                        </h2>
+                    </div>
+                    <div style="padding: 24px;">
                         <div class="form-group">
-                            <label class="form-label">Chat API</label>
-                            <input type="text" id="chatApi" class="form-control" value="https://api.yupra.my.id/api/ai/gpt5?text=">
+                            <label class="form-label">Badilisha Pini ya Admin</label>
+                            <div style="display: flex; gap: 12px; align-items: flex-end;">
+                                <input type="password" id="newAdminPin" class="form-control" placeholder="Pini mpya">
+                                <button class="admin-btn" onclick="updateAdminPin()">
+                                    <i class="fas fa-save"></i> Hifadhi
+                                </button>
+                            </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">Think API</label>
-                            <input type="text" id="thinkApi" class="form-control" value="https://api.yupra.my.id/api/ai/copilot-think?text=">
+                            <label class="form-label">API Endpoints</label>
+                            <input type="text" id="chatApi" class="form-control" value="https://api.yupra.my.id/api/ai/gpt5" style="margin-bottom: 8px;">
+                            <input type="text" id="imageApi" class="form-control" value="https://api.siputzx.my.id/api/ai/magicstudio">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Image API</label>
-                            <input type="text" id="imageApi" class="form-control" value="https://api.siputzx.my.id/api/ai/magicstudio?prompt=">
-                        </div>
-                        <button class="save-btn" onclick="updateAPISettings()">
-                            <i class="fas fa-save"></i> Sasisha API
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit User Modal -->
-    <div class="modal" id="editUserModal">
+    <!-- User Details Modal -->
+    <div class="modal" id="userDetailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Hariri Mtumiaji</h2>
-                <button class="modal-close" onclick="closeModal('editUserModal')">
+                <h2 class="modal-title">Taarifa za Mtumiaji</h2>
+                <button class="modal-close" onclick="closeModal('userDetailsModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="editUserForm">
-                <input type="hidden" id="editUserId">
-                
-                <div class="form-group">
-                    <label class="form-label">Jina la Mtumiaji</label>
-                    <input type="text" id="editUsername" class="form-control" required>
+            <div class="modal-body">
+                <div class="user-details" id="userDetailsContent">
+                    <!-- User details will be loaded here -->
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Barua Pepe</label>
-                    <input type="email" id="editEmail" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+                <button class="admin-btn" onclick="closeModal('userDetailsModal')">
+                    Funga
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversations Modal -->
+    <div class="modal" id="conversationsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Mazungumzo ya Mtumiaji</h2>
+                <button class="modal-close" onclick="closeModal('conversationsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="messages-container" id="conversationMessages">
+                    <!-- Messages will be loaded here -->
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Lugha</label>
-                    <select id="editLanguage" class="form-control">
-                        <option value="sw">Kiswahili</option>
-                        <option value="en">English</option>
-                        <option value="fr">Français</option>
-                        <option value="es">Español</option>
-                        <option value="ar">العربية</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Hadhi</label>
-                    <select id="editIsAdmin" class="form-control">
-                        <option value="false">Mtumiaji</option>
-                        <option value="true">Admin</option>
-                    </select>
-                </div>
-                
-                <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button type="submit" class="save-btn" style="flex: 1;">
-                        <i class="fas fa-save"></i> Hifadhi
-                    </button>
-                    <button type="button" class="save-btn" onclick="closeModal('editUserModal')" style="background: var(--dark-border); color: var(--dark-text);">
-                        Ghairi
-                    </button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button class="admin-btn" onclick="closeModal('conversationsModal')">
+                    Funga
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
         const API_URL = window.location.origin;
         let adminToken = null;
+        let currentTab = 'users';
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -845,37 +917,28 @@
         });
 
         function setupEventListeners() {
-            // Admin login form
-            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleAdminLogin);
             
-            // User search
+            // Search functionality
             document.getElementById('userSearch').addEventListener('input', filterUsers);
-            
-            // Edit user form
-            document.getElementById('editUserForm').addEventListener('submit', handleEditUser);
+            document.getElementById('conversationSearch').addEventListener('input', filterConversations);
         }
 
         function showLoading() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('loadingOverlay').classList.add('active');
         }
 
         function hideLoading() {
-            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('loadingOverlay').classList.remove('active');
         }
 
-        function showMessage(elementId, message, isError = true) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.style.display = 'block';
-            element.style.background = isError 
-                ? 'rgba(239, 68, 68, 0.1)' 
-                : 'rgba(16, 185, 129, 0.1)';
-            element.style.borderColor = isError 
-                ? 'rgba(239, 68, 68, 0.3)' 
-                : 'rgba(16, 185, 129, 0.3)';
-            
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
             setTimeout(() => {
-                element.style.display = 'none';
+                errorEl.style.display = 'none';
             }, 5000);
         }
 
@@ -884,29 +947,10 @@
             const token = localStorage.getItem('sila_admin_token');
             if (token) {
                 adminToken = token;
-                verifyAdminToken();
+                showDashboard();
+                loadDashboardData();
             } else {
-                showLoginPage();
-            }
-        }
-
-        async function verifyAdminToken() {
-            try {
-                const response = await fetch(`${API_URL}/api/admin/stats`, {
-                    headers: {
-                        'Authorization': `Bearer ${adminToken}`
-                    }
-                });
-                
-                if (response.ok) {
-                    showDashboardPage();
-                    loadDashboardData();
-                } else {
-                    localStorage.removeItem('sila_admin_token');
-                    showLoginPage();
-                }
-            } catch (error) {
-                showLoginPage();
+                showLogin();
             }
         }
 
@@ -925,30 +969,27 @@
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     adminToken = data.token;
                     localStorage.setItem('sila_admin_token', adminToken);
-                    showMessage('loginSuccess', data.message, false);
-                    setTimeout(() => {
-                        showDashboardPage();
-                        loadDashboardData();
-                    }, 1000);
+                    showDashboard();
+                    loadDashboardData();
                 } else {
-                    showMessage('loginError', data.error || 'Pini sio sahihi');
+                    showError(data.error || 'Pini sio sahihi');
                 }
             } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao. Tafadhali jaribu tena.');
+                showError('Hitilafu ya mtandao. Tafadhali jaribu tena.');
             } finally {
                 hideLoading();
             }
         }
 
-        function showLoginPage() {
+        function showLogin() {
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('dashboardPage').style.display = 'none';
         }
 
-        function showDashboardPage() {
+        function showDashboard() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
         }
@@ -957,7 +998,7 @@
             if (confirm('Unahakika unataka kutoka kwenye admin panel?')) {
                 localStorage.removeItem('sila_admin_token');
                 adminToken = null;
-                showLoginPage();
+                showLogin();
             }
         }
 
@@ -965,36 +1006,34 @@
         async function loadDashboardData() {
             showLoading();
             try {
-                const response = await fetch(`${API_URL}/api/admin/stats`, {
-                    headers: {
-                        'Authorization': `Bearer ${adminToken}`
-                    }
-                });
-                
+                const response = await fetch(`${API_URL}/api/admin/stats?token=${adminToken}`);
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     // Update stats
                     document.getElementById('totalUsers').textContent = data.stats.totalUsers;
                     document.getElementById('totalConversations').textContent = data.stats.totalConversations;
                     document.getElementById('activeUsers').textContent = data.stats.activeUsers;
                     document.getElementById('todayUsers').textContent = data.stats.todayUsers;
                     
-                    // Update users table
+                    // Load users
                     renderUsersTable(data.users);
+                    
+                    // Load conversations
+                    renderConversationsTable(data.conversations || []);
                 } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kupakia data');
+                    showError(data.error || 'Hitilafu katika kupakia data');
                 }
             } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
+                showError('Hitilafu ya mtandao');
             } finally {
                 hideLoading();
             }
         }
 
         function renderUsersTable(users) {
-            const tableBody = document.getElementById('usersTableBody');
-            tableBody.innerHTML = '';
+            const table = document.getElementById('usersTable');
+            table.innerHTML = '';
             
             users.forEach(user => {
                 const row = document.createElement('tr');
@@ -1011,13 +1050,13 @@
                             <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
                             <div>
                                 <div style="font-weight: 600;">${user.username}</div>
-                                <div style="font-size: 0.75rem; color: var(--dark-text-secondary);">ID: ${user._id.substr(-6)}</div>
+                                <div style="font-size: 12px; color: var(--dark-text-secondary);">ID: ${user._id.substr(-6)}</div>
                             </div>
                         </div>
                     </td>
                     <td>${user.email}</td>
                     <td>
-                        <span class="badge">${user.language.toUpperCase()}</span>
+                        <span class="badge">${user.language?.toUpperCase() || 'SW'}</span>
                     </td>
                     <td>${joinDate}</td>
                     <td>
@@ -1026,24 +1065,74 @@
                         </span>
                     </td>
                     <td>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="action-btn edit" onclick="editUser('${user._id}')">
-                                <i class="fas fa-edit"></i>
+                        <div class="action-btns">
+                            <button class="action-btn view" onclick="viewUserDetails('${user._id}')">
+                                <i class="fas fa-eye"></i> Angalia
                             </button>
-                            <button class="action-btn delete" onclick="deleteUser('${user._id}', '${user.username}')">
-                                <i class="fas fa-trash"></i>
+                            <button class="action-btn edit" onclick="viewUserConversations('${user._id}', '${user.username}')">
+                                <i class="fas fa-comments"></i> Mazungumzo
                             </button>
                         </div>
                     </td>
                 `;
                 
-                tableBody.appendChild(row);
+                table.appendChild(row);
+            });
+        }
+
+        function renderConversationsTable(conversations) {
+            const table = document.getElementById('conversationsTable');
+            table.innerHTML = '';
+            
+            conversations.forEach(conv => {
+                const row = document.createElement('tr');
+                
+                const lastUpdated = new Date(conv.updatedAt).toLocaleString('sw-TZ', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const messageCount = conv.messages?.length || 0;
+                const lastMessage = conv.messages?.[conv.messages.length - 1]?.content || 'Hakuna ujumbe';
+                const truncatedMessage = lastMessage.length > 50 
+                    ? lastMessage.substring(0, 50) + '...' 
+                    : lastMessage;
+                
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="user-avatar" style="width: 28px; height: 28px; font-size: 12px;">
+                                ${conv.userId?.username?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                            <span>${conv.userId?.username || 'Unknown'}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <code style="font-size: 12px;">${conv.sessionId.substr(-8)}</code>
+                    </td>
+                    <td>
+                        <div>${truncatedMessage}</div>
+                        <small style="color: var(--dark-text-secondary);">${messageCount} ujumbe</small>
+                    </td>
+                    <td>${lastUpdated}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn view" onclick="viewConversation('${conv.sessionId}')">
+                                <i class="fas fa-eye"></i> Angalia
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                table.appendChild(row);
             });
         }
 
         function filterUsers() {
             const searchTerm = document.getElementById('userSearch').value.toLowerCase();
-            const rows = document.querySelectorAll('#usersTableBody tr');
+            const rows = document.querySelectorAll('#usersTable tr');
             
             rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
@@ -1051,208 +1140,291 @@
             });
         }
 
-        function refreshStats() {
+        function filterConversations() {
+            const searchTerm = document.getElementById('conversationSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#conversationsTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function refreshData() {
             loadDashboardData();
         }
 
-        function openSettings() {
-            document.getElementById('settingsSection').style.display = 'block';
+        function showTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show selected tab
+            document.getElementById('usersTab').style.display = 'none';
+            document.getElementById('conversationsTab').style.display = 'none';
+            document.getElementById('settingsTab').style.display = 'none';
+            
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+            currentTab = tabName;
         }
 
-        // User management
-        async function editUser(userId) {
+        // User details
+        async function viewUserDetails(userId) {
             showLoading();
             try {
-                // In a real app, you would fetch user details here
-                // For now, we'll get from the table
-                const row = document.querySelector(`[data-user-id="${userId}"]`);
-                if (row) {
-                    document.getElementById('editUserId').value = userId;
-                    document.getElementById('editUsername').value = row.dataset.username;
-                    document.getElementById('editEmail').value = row.dataset.email;
-                    document.getElementById('editLanguage').value = row.dataset.language;
-                    document.getElementById('editIsAdmin').value = row.dataset.isAdmin;
-                    
-                    openModal('editUserModal');
-                }
-            } catch (error) {
-                showMessage('loginError', 'Hitilafu katika kuhariri mtumiaji');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function handleEditUser(e) {
-            e.preventDefault();
-            showLoading();
-            
-            const userId = document.getElementById('editUserId').value;
-            const updates = {
-                username: document.getElementById('editUsername').value,
-                email: document.getElementById('editEmail').value,
-                language: document.getElementById('editLanguage').value,
-                isAdmin: document.getElementById('editIsAdmin').value === 'true'
-            };
-            
-            try {
-                const response = await fetch(`${API_URL}/api/admin/update-user`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
-                    body: JSON.stringify({ userId, updates })
-                });
-                
+                const response = await fetch(`${API_URL}/api/admin/user/${userId}/details?token=${adminToken}`);
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
-                    showMessage('loginSuccess', 'Taarifa za mtumiaji zimesasishwa', false);
-                    closeModal('editUserModal');
-                    loadDashboardData();
+                if (data.success) {
+                    const user = data.user;
+                    const content = document.getElementById('userDetailsContent');
+                    
+                    content.innerHTML = `
+                        <div class="detail-card">
+                            <h3 class="detail-title">
+                                <i class="fas fa-user"></i>
+                                Taarifa za Msingi
+                            </h3>
+                            <div class="detail-item">
+                                <div class="detail-label">Jina la Mtumiaji</div>
+                                <div class="detail-value">${user.username}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Barua Pepe</div>
+                                <div class="detail-value">${user.email}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lugha</div>
+                                <div class="detail-value">${user.language?.toUpperCase() || 'SW'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Hadhi</div>
+                                <div class="detail-value">
+                                    <span class="badge ${user.isAdmin ? 'admin' : 'user'}">
+                                        ${user.isAdmin ? 'Admin' : 'Mtumiaji'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-card">
+                            <h3 class="detail-title">
+                                <i class="fas fa-key"></i>
+                                Usalama
+                            </h3>
+                            <div class="detail-item">
+                                <div class="detail-label">Nenosiri (Hashed)</div>
+                                <div class="detail-value" style="font-family: monospace; font-size: 12px;">
+                                    ${user.password}
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Tarehe ya Kujiunga</div>
+                                <div class="detail-value">
+                                    ${new Date(user.createdAt).toLocaleString('sw-TZ')}
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Badilisha Nenosiri</div>
+                                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                    <input type="password" id="newUserPassword" class="form-control" placeholder="Nenosiri jipya" style="flex: 1;">
+                                    <button class="action-btn" onclick="updateUserPassword('${user.id}')">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    openModal('userDetailsModal');
                 } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kusasisha');
+                    showError(data.error || 'Hitilafu katika kupakia taarifa');
                 }
             } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
+                showError('Hitilafu ya mtandao');
             } finally {
                 hideLoading();
             }
         }
 
-        async function deleteUser(userId, username) {
-            if (!confirm(`Unahakika unataka kufuta mtumiaji "${username}"? Kitendo hakiwezi kurejeshwa.`)) {
+        async function updateUserPassword(userId) {
+            const newPassword = document.getElementById('newUserPassword').value;
+            
+            if (!newPassword || newPassword.length < 6) {
+                showError('Nenosiri lazima liwe na angalau herufi 6');
                 return;
             }
             
             showLoading();
             try {
-                // Note: You'll need to implement this endpoint on the server
-                const response = await fetch(`${API_URL}/api/admin/delete-user/${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${adminToken}`
-                    }
+                const response = await fetch(`${API_URL}/api/admin/user/${userId}/update-password?token=${adminToken}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ newPassword })
                 });
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
-                    showMessage('loginSuccess', 'Mtumiaji amefutwa kikamilifu', false);
-                    loadDashboardData();
+                if (data.success) {
+                    alert('Nenosiri limebadilishwa kikamilifu');
+                    document.getElementById('newUserPassword').value = '';
                 } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kufuta mtumiaji');
+                    showError(data.error || 'Hitilafu katika kubadilisha nenosiri');
                 }
             } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
+                showError('Hitilafu ya mtandao');
             } finally {
                 hideLoading();
             }
         }
 
-        // Settings management
+        async function viewUserConversations(userId, username) {
+            showLoading();
+            try {
+                const response = await fetch(`${API_URL}/api/admin/user/${userId}/conversations?token=${adminToken}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const content = document.getElementById('conversationMessages');
+                    content.innerHTML = '';
+                    
+                    if (data.conversations.length === 0) {
+                        content.innerHTML = `
+                            <div style="text-align: center; padding: 40px 20px; color: var(--dark-text-secondary);">
+                                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+                                <p style="font-size: 1.1rem;">Hakuna mazungumzo</p>
+                            </div>
+                        `;
+                    } else {
+                        data.conversations.forEach(conv => {
+                            const convElement = document.createElement('div');
+                            convElement.className = 'message-item';
+                            convElement.innerHTML = `
+                                <div class="message-header">
+                                    <span class="message-role">Session: ${conv.sessionId.substr(-8)}</span>
+                                    <span class="message-time">
+                                        ${new Date(conv.updatedAt).toLocaleString('sw-TZ')}
+                                    </span>
+                                </div>
+                                <div class="message-content">
+                                    <strong>Ujumbe: ${conv.messages?.length || 0}</strong><br>
+                                    <button class="action-btn" onclick="viewConversation('${conv.sessionId}')" style="margin-top: 8px;">
+                                        <i class="fas fa-eye"></i> Angalia Mazungumzo Kamili
+                                    </button>
+                                </div>
+                            `;
+                            content.appendChild(convElement);
+                        });
+                    }
+                    
+                    document.querySelector('#conversationsModal .modal-title').textContent = 
+                        `Mazungumzo ya ${username}`;
+                    openModal('conversationsModal');
+                } else {
+                    showError(data.error || 'Hitilafu katika kupakia mazungumzo');
+                }
+            } catch (error) {
+                showError('Hitilafu ya mtandao');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function viewConversation(sessionId) {
+            showLoading();
+            try {
+                const response = await fetch(`${API_URL}/api/conversation/${sessionId}?token=${adminToken}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const content = document.getElementById('conversationMessages');
+                    content.innerHTML = '';
+                    
+                    if (data.conversation.messages.length === 0) {
+                        content.innerHTML = `
+                            <div style="text-align: center; padding: 40px 20px; color: var(--dark-text-secondary);">
+                                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+                                <p style="font-size: 1.1rem;">Hakuna ujumbe katika mazungumzo haya</p>
+                            </div>
+                        `;
+                    } else {
+                        data.conversation.messages.forEach(msg => {
+                            const messageElement = document.createElement('div');
+                            messageElement.className = `message-item ${msg.role === 'user' ? 'user' : ''}`;
+                            
+                            const time = new Date(msg.timestamp).toLocaleString('sw-TZ', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit'
+                            });
+                            
+                            let messageContent = msg.content;
+                            if (msg.isImage && msg.imageUrl) {
+                                messageContent = `
+                                    <strong>Picha:</strong><br>
+                                    <img src="${msg.imageUrl}" alt="Picha" style="max-width: 100%; border-radius: 8px; margin-top: 8px;"><br>
+                                    <em>Prompt: ${msg.content}</em>
+                                `;
+                            }
+                            
+                            messageElement.innerHTML = `
+                                <div class="message-header">
+                                    <span class="message-role">${msg.role === 'user' ? 'Mtumiaji' : 'Sila AI'}</span>
+                                    <span class="message-time">${time}</span>
+                                </div>
+                                <div class="message-content">${messageContent}</div>
+                            `;
+                            content.appendChild(messageElement);
+                        });
+                    }
+                    
+                    const userName = data.conversation.userId?.username || 'Unknown';
+                    document.querySelector('#conversationsModal .modal-title').textContent = 
+                        `Mazungumzo ya ${userName} (${sessionId.substr(-8)})`;
+                    openModal('conversationsModal');
+                } else {
+                    showError(data.error || 'Hitilafu katika kupakia mazungumzo');
+                }
+            } catch (error) {
+                showError('Hitilafu ya mtandao');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Settings
         async function updateAdminPin() {
             const newPin = document.getElementById('newAdminPin').value;
-            const confirmPin = document.getElementById('confirmAdminPin').value;
             
-            if (!newPin || !confirmPin) {
-                showMessage('loginError', 'Tafadhali jaza sehemu zote za pini');
+            if (!newPin || newPin.length < 4) {
+                showError('Pini ya admin lazima iwe na angalau herufi 4');
                 return;
             }
             
-            if (newPin.length < 4) {
-                showMessage('loginError', 'Pini lazima iwe na angalau herufi 4');
-                return;
-            }
-            
-            if (newPin !== confirmPin) {
-                showMessage('loginError', 'Pini hazifanani');
+            if (!confirm('Unahakika unataka kubadilisha pini ya admin?')) {
                 return;
             }
             
             showLoading();
             try {
-                const response = await fetch(`${API_URL}/api/admin/update-pin`, {
+                const response = await fetch(`${API_URL}/api/admin/update-pin?token=${adminToken}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ newPin })
                 });
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
-                    showMessage('loginSuccess', 'Pini ya admin imesasishwa kikamilifu', false);
+                if (data.success) {
+                    alert(`Pini ya admin imesasishwa kikamilifu. Pini mpya: ${data.newPin}`);
                     document.getElementById('newAdminPin').value = '';
-                    document.getElementById('confirmAdminPin').value = '';
                 } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kusasisha pini');
+                    showError(data.error || 'Hitilafu katika kusasisha pini');
                 }
             } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function updateAISettings() {
-            showLoading();
-            try {
-                // Note: You'll need to implement this endpoint on the server
-                const response = await fetch(`${API_URL}/api/admin/update-ai-settings`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
-                    body: JSON.stringify({
-                        aiName: document.getElementById('aiName').value,
-                        aiPersonality: document.getElementById('aiPersonality').value
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    showMessage('loginSuccess', 'Mipangilio ya AI imesasishwa', false);
-                } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kusasisha mipangilio');
-                }
-            } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function updateAPISettings() {
-            showLoading();
-            try {
-                // Note: You'll need to implement this endpoint on the server
-                const response = await fetch(`${API_URL}/api/admin/update-api-settings`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
-                    body: JSON.stringify({
-                        chatApi: document.getElementById('chatApi').value,
-                        thinkApi: document.getElementById('thinkApi').value,
-                        imageApi: document.getElementById('imageApi').value
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    showMessage('loginSuccess', 'API endpoints zimesasishwa', false);
-                } else {
-                    showMessage('loginError', data.error || 'Hitilafu katika kusasisha API');
-                }
-            } catch (error) {
-                showMessage('loginError', 'Hitilafu ya mtandao');
+                showError('Hitilafu ya mtandao');
             } finally {
                 hideLoading();
             }
@@ -1260,11 +1432,11 @@
 
         // Modal functions
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+            document.getElementById(modalId).classList.add('active');
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            document.getElementById(modalId).classList.remove('active');
         }
     </script>
 </body>
