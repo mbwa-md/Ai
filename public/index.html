@@ -3,76 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sila AI - Msaidizi Wako Wa Kisasa 2026</title>
+    <title>Sila AI - Msaidizi Wako Wa Kisasa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         :root {
-            --primary: #7c3aed;
-            --primary-dark: #6d28d9;
-            --secondary: #10b981;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-            --info: #3b82f6;
+            --primary-color: #007AFF;
+            --secondary-color: #34C759;
+            --accent-color: #5856D6;
+            --danger-color: #FF3B30;
+            --warning-color: #FF9500;
             
-            --light-bg: #ffffff;
-            --light-card: #f8fafc;
-            --light-border: #e2e8f0;
-            --light-text: #1e293b;
-            --light-text-secondary: #64748b;
+            --bg-color: #0B0B0B;
+            --card-color: #1C1C1E;
+            --message-in: #2B2B2D;
+            --message-out: #007AFF;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --border-color: #3A3A3C;
             
-            --dark-bg: #0f172a;
-            --dark-card: #1e293b;
-            --dark-border: #334155;
-            --dark-text: #f1f5f9;
-            --dark-text-secondary: #94a3b8;
-            
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-            --radius-full: 9999px;
-            
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: var(--dark-bg);
-            --card-color: var(--dark-card);
-            --text-color: var(--dark-text);
-            --text-secondary: var(--dark-text-secondary);
-            --border-color: var(--dark-border);
-            --shadow-color: rgba(0, 0, 0, 0.3);
-        }
-
-        [data-theme="light"] {
-            --bg-color: var(--light-bg);
-            --card-color: var(--light-card);
-            --text-color: var(--light-text);
-            --text-secondary: var(--light-text-secondary);
-            --border-color: var(--light-border);
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --header-height: 60px;
+            --input-height: 60px;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: var(--text-color);
-            transition: var(--transition);
-            overflow-x: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
         }
 
         /* Notification System */
@@ -80,49 +44,33 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 400px;
+            z-index: 10000;
+            max-width: 350px;
         }
 
         .notification {
             background: var(--card-color);
-            border-left: 4px solid var(--primary);
-            padding: 16px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease;
-            transform-origin: top right;
         }
 
         .notification.error {
-            border-left-color: var(--danger);
-            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), var(--card-color));
+            border-left-color: var(--danger-color);
         }
 
         .notification.success {
-            border-left-color: var(--success);
-            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), var(--card-color));
+            border-left-color: var(--secondary-color);
         }
 
         .notification.warning {
-            border-left-color: var(--warning);
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), var(--card-color));
-        }
-
-        .notification.info {
-            border-left-color: var(--info);
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), var(--card-color));
-        }
-
-        .notification-icon {
-            font-size: 1.25rem;
-            flex-shrink: 0;
+            border-left-color: var(--warning-color);
         }
 
         .notification-content {
@@ -132,13 +80,11 @@
         .notification-title {
             font-weight: 600;
             margin-bottom: 4px;
-            color: var(--text-color);
         }
 
         .notification-message {
-            font-size: 0.875rem;
+            font-size: 14px;
             color: var(--text-secondary);
-            line-height: 1.4;
         }
 
         .notification-close {
@@ -146,15 +92,7 @@
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 1.25rem;
             padding: 4px;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-        }
-
-        .notification-close:hover {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-color);
         }
 
         @keyframes slideIn {
@@ -168,17 +106,6 @@
             }
         }
 
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
-
         /* Loading Overlay */
         .loading-overlay {
             position: fixed;
@@ -186,15 +113,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9998;
+            z-index: 9999;
             opacity: 0;
             visibility: hidden;
-            transition: var(--transition);
+            transition: all 0.3s;
         }
 
         .loading-overlay.active {
@@ -203,11 +130,11 @@
         }
 
         .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(124, 58, 237, 0.3);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            border-top-color: var(--primary);
+            border-top-color: var(--primary-color);
             animation: spin 1s linear infinite;
         }
 
@@ -215,280 +142,311 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Main App Layout */
+        /* Main App Container */
         .app-container {
+            display: flex;
+            height: 100vh;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-            height: 95vh;
+            position: relative;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .logo-section {
-            text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 8px;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 12px;
-            background: linear-gradient(45deg, #f59e0b, #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-text {
-            font-size: 1.75rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #8b5cf6, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
-            color: white;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: left;
-            width: 100%;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(4px);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .nav-btn.active {
-            background: rgba(124, 58, 237, 0.3);
-            border-color: rgba(124, 58, 237, 0.5);
-        }
-
-        .nav-btn i {
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .language-selector {
-            position: absolute;
+        /* Menu Toggle Button */
+        .menu-toggle {
+            position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 100;
-        }
-
-        .language-btn {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-full);
-            padding: 10px 16px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
+            background: var(--card-color);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: var(--transition);
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            color: var(--text-primary);
+            font-size: 20px;
+            transition: all 0.3s;
         }
 
-        .language-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .menu-toggle:hover {
+            background: var(--border-color);
             transform: scale(1.05);
         }
 
-        .language-dropdown {
-            position: absolute;
-            top: 100%;
+        /* Sidebar Menu */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
             left: 0;
-            margin-top: 8px;
+            width: 280px;
+            height: 100%;
             background: var(--card-color);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            min-width: 180px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .language-dropdown.active {
-            display: block;
-            animation: slideDown 0.2s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .language-option {
-            padding: 12px 16px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            padding: 80px 20px 20px;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-color);
-            cursor: pointer;
-            transition: var(--transition);
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
         }
 
-        .language-option:hover {
-            background: rgba(124, 58, 237, 0.1);
+        .sidebar-menu.active {
+            transform: translateX(0);
         }
 
-        .language-option.active {
-            background: rgba(124, 58, 237, 0.2);
-            color: var(--primary);
-            font-weight: 600;
+        .menu-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .menu-avatar {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            cursor: pointer;
-            font-size: 1.25rem;
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .menu-username {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .menu-email {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .menu-items {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-item.active {
+            background: rgba(0, 122, 255, 0.15);
+            color: var(--primary-color);
+        }
+
+        .menu-item i {
+            width: 24px;
+            font-size: 18px;
+        }
+
+        .menu-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1000;
+        }
+
+        .language-btn {
+            background: var(--card-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .language-btn:hover {
+            background: var(--border-color);
+        }
+
+        /* Main Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+
+        .chat-container.menu-open {
+            margin-left: 280px;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            height: var(--header-height);
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
 
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(15deg);
-        }
-
-        /* Chat Container */
-        .chat-container {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: var(--radius-xl);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            backdrop-filter: blur(10px);
-        }
-
-        .chat-header {
-            padding: 20px 24px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .chat-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .chat-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
-        .chat-title-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 10px;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
+        .chat-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: bold;
-            font-size: 1rem;
-            border: 2px solid white;
-            box-shadow: var(--shadow);
+            font-size: 18px;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-status {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .header-btn:hover {
+            background: var(--border-color);
         }
 
         /* Messages Container */
         .messages-container {
             flex: 1;
-            padding: 24px;
             overflow-y: auto;
-            background: var(--bg-color);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            background: var(--bg-color);
         }
 
         .welcome-message {
             text-align: center;
-            padding: 60px 20px;
-            max-width: 800px;
+            padding: 40px 20px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        .message {
+        .welcome-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            opacity: 0.8;
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .welcome-actions {
             display: flex;
-            gap: 16px;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .welcome-btn {
+            padding: 12px 24px;
+            background: var(--card-color);
+            border: none;
+            border-radius: 25px;
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .welcome-btn:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        /* Message Bubbles */
+        .message {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
             animation: fadeIn 0.3s ease;
         }
 
@@ -503,105 +461,85 @@
             }
         }
 
-        .message.user {
-            flex-direction: row-reverse;
+        .message.outgoing {
+            align-self: flex-end;
         }
 
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            flex-shrink: 0;
-            border: 2px solid var(--bg-color);
+        .message.incoming {
+            align-self: flex-start;
         }
 
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, var(--accent), #f59e0b);
-        }
-
-        .message-content {
-            max-width: 70%;
-            background: var(--card-color);
-            padding: 16px 20px;
-            border-radius: var(--radius-lg);
-            border-top-left-radius: var(--radius-sm);
-            box-shadow: var(--shadow);
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
             position: relative;
-        }
-
-        .message.user .message-content {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border-top-left-radius: var(--radius-lg);
-            border-top-right-radius: var(--radius-sm);
-        }
-
-        .message-text {
-            line-height: 1.6;
-            font-size: 1rem;
             word-wrap: break-word;
             white-space: pre-wrap;
+            line-height: 1.5;
         }
 
-        .message-text a {
-            color: var(--primary);
-            text-decoration: none;
-            border-bottom: 1px solid var(--primary);
-        }
-
-        .message-text a:hover {
-            opacity: 0.8;
-        }
-
-        .message.user .message-text a {
+        .message.outgoing .message-bubble {
+            background: var(--message-out);
             color: white;
-            border-bottom-color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.incoming .message-bubble {
+            background: var(--message-in);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
         }
 
         .message-time {
-            font-size: 0.75rem;
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 8px;
+            margin-top: 4px;
             text-align: right;
-            opacity: 0.8;
+            padding: 0 4px;
         }
 
-        .message.user .message-time {
-            color: rgba(255, 255, 255, 0.8);
+        .message.outgoing .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .image-message {
+            margin-top: 10px;
         }
 
         .image-message img {
             max-width: 100%;
-            border-radius: var(--radius);
-            margin-top: 12px;
-            box-shadow: var(--shadow);
+            border-radius: 12px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.3s;
         }
 
         .image-message img:hover {
             transform: scale(1.02);
         }
 
+        .image-prompt {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Typing Indicator */
         .typing-indicator {
+            background: var(--message-in);
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 8px 16px;
-            background: var(--card-color);
-            border-radius: var(--radius-lg);
+            max-width: 100px;
         }
 
         .typing-dot {
             width: 8px;
             height: 8px;
-            background: var(--primary);
+            background: var(--text-secondary);
             border-radius: 50%;
             animation: typing 1.4s infinite ease-in-out;
         }
@@ -614,81 +552,104 @@
             40% { transform: scale(1); opacity: 1; }
         }
 
-        /* Input Area */
+        /* Input Container */
         .input-container {
-            padding: 20px;
+            height: var(--input-height);
             background: var(--card-color);
             border-top: 1px solid var(--border-color);
-        }
-
-        .input-wrapper {
+            padding: 10px 20px;
             display: flex;
-            gap: 12px;
-            align-items: flex-end;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
         }
 
         .message-input {
             flex: 1;
-            padding: 16px 20px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            font-size: 1rem;
-            resize: none;
+            height: 40px;
+            padding: 0 15px;
             background: var(--bg-color);
-            color: var(--text-color);
-            transition: var(--transition);
-            min-height: 56px;
-            max-height: 150px;
-            line-height: 1.5;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            line-height: 40px;
+            max-height: 120px;
+            overflow-y: auto;
         }
 
         .message-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            border-color: var(--primary-color);
         }
 
-        .input-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .action-btn {
-            width: 48px;
-            height: 48px;
+        .input-btn {
+            background: transparent;
             border: none;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 18px;
+            transition: all 0.3s;
         }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        .input-btn:hover {
+            background: var(--border-color);
         }
 
-        .action-btn.active {
-            background: linear-gradient(135deg, var(--accent), #f59e0b);
-            transform: scale(1.1);
+        .input-btn.active {
+            background: var(--primary-color);
+            color: white;
         }
 
-        .action-btn.secondary {
-            background: linear-gradient(135deg, var(--info), #3b82f6);
+        .input-btn.send {
+            background: var(--primary-color);
+            color: white;
         }
 
-        .action-btn.danger {
-            background: linear-gradient(135deg, var(--danger), #ef4444);
+        .input-btn.send:hover {
+            background: #0056CC;
+            transform: scale(1.05);
         }
 
-        .action-btn.success {
-            background: linear-gradient(135deg, var(--success), #10b981);
+        .input-btn.voice {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .input-btn.voice:hover {
+            background: #2A9E4B;
+        }
+
+        .input-btn.recording {
+            background: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Mode Indicator */
+        .mode-indicator {
+            position: absolute;
+            top: -25px;
+            left: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         /* Auth Pages */
@@ -697,44 +658,63 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .auth-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 48px;
-            border-radius: var(--radius-xl);
+            background: var(--card-color);
+            padding: 40px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 480px;
-            box-shadow: var(--shadow-xl);
-            backdrop-filter: blur(20px);
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .auth-header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 30px;
         }
 
         .auth-logo {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 16px;
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
         }
 
         .auth-title {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 8px;
         }
 
         .auth-subtitle {
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 14px;
+        }
+
+        .auth-language {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
         }
 
         .form-group {
@@ -745,171 +725,225 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: var(--text-color);
         }
 
         .form-control {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            transition: var(--transition);
+            padding: 12px 16px;
             background: var(--bg-color);
-            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-        }
-
-        .form-control.error {
-            border-color: var(--danger);
-        }
-
-        .error-message {
-            color: var(--danger);
-            font-size: 0.875rem;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            border-color: var(--primary-color);
         }
 
         .auth-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
+            padding: 14px;
+            background: var(--primary-color);
             border: none;
-            border-radius: var(--radius);
-            font-size: 1rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            margin-top: 8px;
+            transition: all 0.3s;
         }
 
         .auth-btn:hover {
+            background: #0056CC;
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .auth-btn:active {
-            transform: translateY(0);
         }
 
         .auth-links {
             display: flex;
             justify-content: space-between;
-            margin-top: 24px;
-            font-size: 0.875rem;
+            margin-top: 20px;
+            font-size: 14px;
         }
 
         .auth-link {
-            color: var(--primary);
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
         }
 
         .auth-link:hover {
             text-decoration: underline;
         }
 
-        /* Language Toggle in Auth */
-        .auth-language-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-full);
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .lang-btn.active {
-            background: white;
-            color: var(--primary);
-        }
-
-        .lang-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
         /* Responsive */
-        @media (max-width: 1024px) {
-            .app-container {
-                flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-            }
-            .sidebar {
-                width: 100%;
-                border-radius: var(--radius);
-                margin-bottom: 20px;
-            }
-            .chat-container {
-                min-height: 70vh;
-            }
-        }
-
         @media (max-width: 768px) {
-            .message-content {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .menu-toggle {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .language-selector {
+                top: 10px;
+                right: 60px;
+            }
+            
+            .sidebar-menu {
+                width: 100%;
+            }
+            
+            .chat-container.menu-open {
+                margin-left: 0;
+            }
+            
+            .message {
                 max-width: 85%;
             }
-            .input-wrapper {
-                flex-direction: column;
+            
+            .input-container {
+                padding: 10px;
             }
-            .action-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
+            
             .auth-box {
-                padding: 32px 24px;
-            }
-            .chat-header {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-            .theme-toggle, .language-selector {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin-bottom: 16px;
+                padding: 30px 20px;
             }
         }
 
         @media (max-width: 480px) {
-            .message-content {
+            .welcome-title {
+                font-size: 24px;
+            }
+            
+            .welcome-actions {
+                flex-direction: column;
+            }
+            
+            .welcome-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .message {
                 max-width: 90%;
-                padding: 12px 16px;
             }
-            .action-btn {
-                width: 36px;
-                height: 36px;
-            }
-            .app-container {
-                padding: 12px;
-            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* File Upload */
+        .file-input {
+            display: none;
+        }
+
+        /* History Modal */
+        .history-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .history-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .history-content {
+            background: var(--card-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .history-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .history-item {
+            padding: 15px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            background: var(--border-color);
+        }
+
+        .history-item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .history-item-date {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
     </style>
 </head>
-<body data-theme="light">
+<body>
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
     
@@ -917,10 +951,25 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
+    
+    <!-- History Modal -->
+    <div class="history-modal" id="historyModal">
+        <div class="history-content">
+            <div class="history-header">
+                <h2 class="history-title" id="historyTitle">Historia ya Mazungumzo</h2>
+                <button class="history-close" onclick="closeHistoryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- History items will be loaded here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Authentication Pages -->
     <div id="auth-page" class="auth-container" style="display: none;">
-        <div class="auth-language-toggle">
+        <div class="auth-language">
             <button class="lang-btn active" data-lang="sw">SW</button>
             <button class="lang-btn" data-lang="en">EN</button>
         </div>
@@ -928,10 +977,10 @@
         <div class="auth-box">
             <div class="auth-header">
                 <div class="auth-logo">
-                    <i class="fas fa-brain"></i>
+                    <i class="fas fa-robot"></i>
                 </div>
-                <h1 class="auth-title" id="authTitle">SILA AI 2026</h1>
-                <p class="auth-subtitle" id="authSubtitle">Msaidizi Wako Mwenye Akili wa Kisasa</p>
+                <h1 class="auth-title">Sila AI</h1>
+                <p class="auth-subtitle">Msaidizi wako wa kisasa wa 2026</p>
             </div>
             
             <div id="login-form">
@@ -939,12 +988,10 @@
                     <div class="form-group">
                         <label class="form-label" id="loginEmailLabel">Barua Pepe</label>
                         <input type="email" id="loginEmail" class="form-control" placeholder="weka@email.com" required>
-                        <div class="error-message" id="loginEmailError"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" id="loginPasswordLabel">Nenosiri</label>
                         <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
-                        <div class="error-message" id="loginPasswordError"></div>
                     </div>
                     <button type="submit" class="auth-btn" id="loginButton">Ingia</button>
                 </form>
@@ -960,31 +1007,24 @@
                     <div class="form-group">
                         <label class="form-label" id="registerUsernameLabel">Jina la Mtumiaji</label>
                         <input type="text" id="registerUsername" class="form-control" placeholder="jina lako" required>
-                        <div class="error-message" id="registerUsernameError"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" id="registerEmailLabel">Barua Pepe</label>
                         <input type="email" id="registerEmail" class="form-control" placeholder="weka@email.com" required>
-                        <div class="error-message" id="registerEmailError"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" id="registerPasswordLabel">Nenosiri</label>
                         <input type="password" id="registerPassword" class="form-control" placeholder="••••••••" required>
-                        <div class="error-message" id="registerPasswordError"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" id="registerConfirmLabel">Thibitisha Nenosiri</label>
                         <input type="password" id="registerConfirmPassword" class="form-control" placeholder="••••••••" required>
-                        <div class="error-message" id="registerConfirmError"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" id="registerLanguageLabel">Chagua Lugha</label>
                         <select id="registerLanguage" class="form-control">
                             <option value="sw">Kiswahili</option>
                             <option value="en">English</option>
-                            <option value="fr">Français</option>
-                            <option value="es">Español</option>
-                            <option value="ar">العربية</option>
                         </select>
                     </div>
                     <button type="submit" class="auth-btn" id="registerButton">Jisajiri</button>
@@ -1000,7 +1040,6 @@
                     <div class="form-group">
                         <label class="form-label" id="forgotEmailLabel">Barua Pepe Yako</label>
                         <input type="email" id="forgotEmail" class="form-control" placeholder="weka@email.com" required>
-                        <div class="error-message" id="forgotEmailError"></div>
                     </div>
                     <button type="submit" class="auth-btn" id="forgotButton">Tuma Maelekezo</button>
                 </form>
@@ -1014,191 +1053,129 @@
 
     <!-- Main Chat Interface -->
     <div id="chat-page" style="display: none;">
+        <!-- Menu Toggle Button -->
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Language Selector -->
         <div class="language-selector">
-            <button class="language-btn" id="languageToggle">
+            <button class="language-btn" onclick="toggleLanguageDropdown()">
                 <i class="fas fa-globe"></i>
-                <span id="currentLanguage">Kiswahili</span>
-                <i class="fas fa-chevron-down"></i>
+                <span id="currentLanguage">SW</span>
             </button>
-            <div class="language-dropdown" id="languageDropdown">
-                <div class="language-option active" data-lang="sw">
-                    <i class="fas fa-flag"></i>
-                    <span>Kiswahili</span>
-                </div>
-                <div class="language-option" data-lang="en">
-                    <i class="fas fa-flag-usa"></i>
-                    <span>English</span>
-                </div>
-                <div class="language-option" data-lang="fr">
-                    <i class="fas fa-flag"></i>
-                    <span>Français</span>
-                </div>
-                <div class="language-option" data-lang="es">
-                    <i class="fas fa-flag"></i>
-                    <span>Español</span>
-                </div>
-                <div class="language-option" data-lang="ar">
-                    <i class="fas fa-flag"></i>
-                    <span>العربية</span>
-                </div>
+        </div>
+        
+        <!-- Sidebar Menu -->
+        <div class="sidebar-menu" id="sidebarMenu">
+            <div class="menu-header">
+                <div class="menu-avatar" id="menuAvatar">U</div>
+                <div class="menu-username" id="menuUsername">Mtumiaji</div>
+                <div class="menu-email" id="menuEmail">email@example.com</div>
+            </div>
+            
+            <div class="menu-items">
+                <button class="menu-item active" onclick="newChat()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span id="menuNewChat">Mazungumzo Mapya</span>
+                </button>
+                <button class="menu-item" onclick="showHistory()">
+                    <i class="fas fa-history"></i>
+                    <span id="menuHistory">Historia ya Mazungumzo</span>
+                </button>
+                <button class="menu-item" onclick="uploadFile()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span id="menuUpload">Pakia Faili</span>
+                </button>
+                <button class="menu-item" onclick="contactDeveloper()">
+                    <i class="fab fa-whatsapp"></i>
+                    <span id="menuContact">Wasiliana na Developer</span>
+                </button>
+                <button class="menu-item" onclick="showSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span id="menuSettings">Mipangilio</span>
+                </button>
+            </div>
+            
+            <div class="menu-footer">
+                <button class="menu-item" style="color: #FF3B30;" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span id="menuLogout">Toka</span>
+                </button>
             </div>
         </div>
         
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <i class="fas fa-moon"></i>
-        </button>
-        
-        <div class="app-container">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="logo-section">
-                    <div class="logo">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="logo-text">SILA AI</div>
-                    <small style="color: #10b981; font-weight: 600; font-size: 0.875rem;">2026 EDITION</small>
-                </div>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn active" onclick="newChat()">
-                        <i class="fas fa-plus-circle"></i>
-                        <span id="navNewChat">Mazungumzo Mapya</span>
-                    </button>
-                    <button class="nav-btn" onclick="showHistory()">
-                        <i class="fas fa-history"></i>
-                        <span id="navHistory">Historia ya Mazungumzo</span>
-                    </button>
-                    <button class="nav-btn" onclick="uploadFile()">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span id="navUpload">Pakia Faili</span>
-                    </button>
-                    <button class="nav-btn" onclick="contactDeveloper()">
-                        <i class="fab fa-whatsapp"></i>
-                        <span id="navContact">Wasiliana na Developer</span>
-                    </button>
-                    <div style="margin-top: auto;">
-                        <button class="nav-btn" onclick="window.open('/admin', '_blank')">
-                            <i class="fas fa-cog"></i>
-                            <span id="navAdmin">Admin Panel</span>
-                        </button>
-                        <button class="nav-btn" style="background: rgba(239, 68, 68, 0.2);" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span id="navLogout">Toka</span>
-                        </button>
+        <!-- Main Chat Container -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-info">
+                    <div class="chat-avatar">S</div>
+                    <div>
+                        <div class="chat-title">Sila AI</div>
+                        <div class="chat-status" id="chatStatus">Inatumika</div>
                     </div>
                 </div>
-                
-                <div style="text-align: center; color: rgba(255,255,255,0.7); font-size: 0.75rem; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
-                    <p>© 2026 Sila AI v3.0 | Powered by Advanced Neural Networks</p>
-                    <p id="footerText">Kisasa zaidi ya enzi yake</p>
+                <div class="chat-actions">
+                    <button class="header-btn" onclick="toggleTheme()" title="Badilisha muonekano">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
             </div>
             
-            <!-- Main Chat Area -->
-            <div class="chat-container">
-                <div class="chat-header">
-                    <div>
-                        <h2 class="chat-title">
-                            <i class="fas fa-brain"></i>
-                            Sila AI
-                            <span class="chat-title-badge" id="aiStatus">ONLINE</span>
-                        </h2>
-                        <p style="opacity: 0.9; font-size: 0.9rem;" id="aiDescription">Msaidizi wako mwenye akili, anayekumbuka na kuelewa</p>
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <div class="welcome-icon">
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <div class="user-info">
-                        <div class="avatar" id="userAvatar">U</div>
-                        <div>
-                            <div style="font-weight: 600;" id="username">Mtumiaji</div>
-                            <small style="opacity: 0.8;" id="userStatus">Inatumika</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="messages-container" id="messagesContainer">
-                    <div class="welcome-message">
-                        <div style="font-size: 5rem; margin-bottom: 24px; background: linear-gradient(45deg, #7c3aed, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <h2 class="welcome-title" id="welcomeTitle">Karibu kwenye Sila AI 2026</h2>
+                    <p class="welcome-text" id="welcomeText">
+                        Mimi ni Sila AI, msaidizi wako wa kisasa wa 2026. Nina uwezo wa kukumbuka mazungumzo, 
+                        kutengeneza picha, kusoma faili, na kukusaidia katika kila jambo. Tuongee!
+                    </p>
+                    <div class="welcome-actions">
+                        <button class="welcome-btn" onclick="suggestPrompt('uniambie kuhusu wewe')">
                             <i class="fas fa-robot"></i>
-                        </div>
-                        <h2 style="font-size: 2.5rem; margin-bottom: 16px; background: linear-gradient(45deg, #7c3aed, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                            Karibu kwenye Sila AI 2026
-                        </h2>
-                        <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px;">
-                            Mimi ni Sila AI, msaidizi wako wa kisasa wa 2026. Nina uwezo wa kukumbuka mazungumzo, 
-                            kutengeneza picha, kusoma faili, na kukusaidia katika kila jambo. Tuongee!
-                        </p>
-                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                            <button class="action-btn secondary" onclick="suggestPrompt('uniambie kuhusu wewe')" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                                <i class="fas fa-robot"></i> Jijulishe
-                            </button>
-                            <button class="action-btn success" onclick="suggestPrompt('nisaidie kutengeneza mpango wa kazi')" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                                <i class="fas fa-lightbulb"></i> Pendekeza
-                            </button>
-                            <button class="action-btn" onclick="toggleImageMode()" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                                <i class="fas fa-image"></i> Tengeneza Picha
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-container">
-                    <div class="input-wrapper">
-                        <textarea 
-                            id="messageInput" 
-                            class="message-input" 
-                            placeholder="Andika ujumbe wako hapa... (Bonyeza Shift+Enter kwa mstari mpya)" 
-                            rows="1"
-                            onkeydown="handleKeyDown(event)"
-                        ></textarea>
-                        <button class="action-btn secondary" onclick="uploadFile()" title="Pakia Faili">
-                            <i class="fas fa-paperclip"></i>
+                            <span id="welcomeLearn">Jijulishe</span>
                         </button>
-                        <button class="action-btn" id="imageModeBtn" onclick="toggleImageMode()" title="Hali ya Picha">
+                        <button class="welcome-btn" onclick="suggestPrompt('nisaidie kutengeneza mpango wa kazi')">
+                            <i class="fas fa-lightbulb"></i>
+                            <span id="welcomeSuggest">Pendekeza</span>
+                        </button>
+                        <button class="welcome-btn" onclick="toggleImageMode()">
                             <i class="fas fa-image"></i>
+                            <span id="welcomeImage">Tengeneza Picha</span>
                         </button>
-                        <button class="action-btn success" id="voiceBtn" onclick="toggleVoiceInput()" title="Sema">
-                            <i class="fas fa-microphone"></i>
-                        </button>
-                        <button class="action-btn" onclick="sendMessage()" title="Tuma">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    <div class="input-actions" id="inputActions" style="display: none;">
-                        <small style="color: var(--text-secondary);">
-                            <i class="fas fa-info-circle"></i>
-                            <span id="modeText">Unatuma maandiko</span>
-                        </small>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- History Modal -->
-    <div id="historyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9997; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: var(--card-color); width: 100%; max-width: 800px; max-height: 80vh; border-radius: var(--radius-xl); padding: 32px; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-                <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-color);">
-                    <i class="fas fa-history"></i>
-                    <span id="historyTitle">Historia ya Mazungumzo</span>
-                </h2>
-                <button onclick="closeHistoryModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; padding: 8px; border-radius: var(--radius); transition: var(--transition);">
-                    <i class="fas fa-times"></i>
+            
+            <!-- Input Container -->
+            <div class="input-container">
+                <input type="file" id="fileInput" class="file-input" multiple onchange="handleFileUpload()">
+                <button class="input-btn" onclick="uploadFile()" title="Pakia Faili">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <button class="input-btn" id="imageModeBtn" onclick="toggleImageMode()" title="Hali ya Picha">
+                    <i class="fas fa-image"></i>
+                </button>
+                <textarea 
+                    id="messageInput" 
+                    class="message-input" 
+                    placeholder="Andika ujumbe wako hapa..." 
+                    rows="1"
+                    onkeydown="handleKeyDown(event)"
+                ></textarea>
+                <button class="input-btn voice" id="voiceBtn" onclick="toggleVoiceInput()" title="Sema">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="input-btn send" onclick="sendMessage()" title="Tuma">
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
-            <div id="historyList" style="flex: 1; overflow-y: auto; padding-right: 8px;">
-                <!-- History items will appear here -->
-            </div>
-            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); text-align: center;">
-                <button onclick="clearHistory()" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); padding: 10px 24px; border-radius: var(--radius); cursor: pointer; font-weight: 500; transition: var(--transition);">
-                    <i class="fas fa-trash"></i>
-                    <span id="clearHistoryText">Futa Historia</span>
-                </button>
-            </div>
         </div>
     </div>
-
-    <!-- File Upload Modal -->
-    <input type="file" id="fileInput" style="display: none;" multiple onchange="handleFileUpload()">
 
     <script>
         // Configuration
@@ -1210,183 +1187,25 @@
         let currentUser = null;
         let authToken = null;
         let currentLanguage = 'sw';
-        let notificationQueue = [];
-        let isNotificationShowing = false;
-
-        // Language translations
-        const translations = {
-            sw: {
-                // Auth
-                login: 'Ingia',
-                register: 'Jisajiri',
-                email: 'Barua Pepe',
-                password: 'Nenosiri',
-                confirmPassword: 'Thibitisha Nenosiri',
-                username: 'Jina la Mtumiaji',
-                forgotPassword: 'Umesahau nenosiri?',
-                haveAccount: 'Tayari una akaunti? Ingia',
-                noAccount: 'Hauna akaunti? Jisajiri',
-                backToLogin: 'Rudi kwenye kuingia',
-                
-                // Chat
-                newChat: 'Mazungumzo Mapya',
-                history: 'Historia ya Mazungumzo',
-                upload: 'Pakia Faili',
-                contact: 'Wasiliana na Developer',
-                admin: 'Admin Panel',
-                logout: 'Toka',
-                online: 'INAYOTUMIKA',
-                offline: 'HAITUMIKI',
-                aiDescription: 'Msaidizi wako mwenye akili, anayekumbuka na kuelewa',
-                placeholder: 'Andika ujumbe wako hapa... (Bonyeza Shift+Enter kwa mstari mpya)',
-                imagePlaceholder: 'Andika maelezo ya picha unayotaka...',
-                send: 'Tuma',
-                typing: 'Anaandika...',
-                
-                // Notifications
-                connected: 'Imeunganishwa kikamilifu',
-                disconnected: 'Muunganisho umekatika',
-                error: 'Hitilafu',
-                success: 'Imefanikiwa',
-                warning: 'Onyo',
-                info: 'Taarifa',
-                networkError: 'Hitilafu ya mtandao. Tafadhali angalia muunganisho wako.',
-                serverError: 'Hitilafu ya server. Tafadhali jaribu tena baadae.',
-                authError: 'Hitilafu ya uthibitishaji. Tafadhali ingia tena.',
-                fileUploaded: 'Faili imepakiwa kikamilifu',
-                imageGenerated: 'Picha imetengenezwa',
-                languageChanged: 'Lugha imebadilishwa',
-                
-                // History
-                historyTitle: 'Historia ya Mazungumzo',
-                clearHistory: 'Futa Historia',
-                noHistory: 'Hakuna historia ya mazungumzo',
-                deleteConfirm: 'Unahakika unataka kufuta historia yote?',
-                
-                // Welcome
-                welcomeTitle: 'Karibu kwenye Sila AI 2026',
-                welcomeMessage: 'Mimi ni Sila AI, msaidizi wako wa kisasa wa 2026. Nina uwezo wa kukumbuka mazungumzo, kutengeneza picha, kusoma faili, na kukusaidia katika kila jambo. Tuongee!',
-                learnAbout: 'Jijulishe',
-                suggest: 'Pendekeza',
-                createImage: 'Tengeneza Picha',
-                
-                // Footer
-                footerText: 'Kisasa zaidi ya enzi yake',
-                
-                // Voice
-                voiceStart: 'Sauti imezimwa. Anza kusema sasa...',
-                voiceStop: 'Sauti imesimamishwa',
-                voiceError: 'Sauti haitumiki kwenye browser yako',
-                
-                // Image Mode
-                imageModeOn: 'Hali ya picha imewashwa',
-                imageModeOff: 'Hali ya picha imezimwa',
-                
-                // Status
-                active: 'Inatumika',
-                idle: 'Inapumzika'
-            },
-            en: {
-                // Auth
-                login: 'Login',
-                register: 'Register',
-                email: 'Email',
-                password: 'Password',
-                confirmPassword: 'Confirm Password',
-                username: 'Username',
-                forgotPassword: 'Forgot Password?',
-                haveAccount: 'Already have an account? Login',
-                noAccount: 'No account? Register',
-                backToLogin: 'Back to Login',
-                
-                // Chat
-                newChat: 'New Chat',
-                history: 'Chat History',
-                upload: 'Upload File',
-                contact: 'Contact Developer',
-                admin: 'Admin Panel',
-                logout: 'Logout',
-                online: 'ONLINE',
-                offline: 'OFFLINE',
-                aiDescription: 'Your intelligent assistant that remembers and understands',
-                placeholder: 'Type your message here... (Press Shift+Enter for new line)',
-                imagePlaceholder: 'Describe the image you want to generate...',
-                send: 'Send',
-                typing: 'Typing...',
-                
-                // Notifications
-                connected: 'Connected successfully',
-                disconnected: 'Connection lost',
-                error: 'Error',
-                success: 'Success',
-                warning: 'Warning',
-                info: 'Info',
-                networkError: 'Network error. Please check your connection.',
-                serverError: 'Server error. Please try again later.',
-                authError: 'Authentication error. Please login again.',
-                fileUploaded: 'File uploaded successfully',
-                imageGenerated: 'Image generated',
-                languageChanged: 'Language changed',
-                
-                // History
-                historyTitle: 'Chat History',
-                clearHistory: 'Clear History',
-                noHistory: 'No chat history',
-                deleteConfirm: 'Are you sure you want to delete all history?',
-                
-                // Welcome
-                welcomeTitle: 'Welcome to Sila AI 2026',
-                welcomeMessage: 'I am Sila AI, your modern 2026 assistant. I can remember conversations, generate images, read files, and help you with everything. Let\'s talk!',
-                learnAbout: 'Learn About',
-                suggest: 'Suggest',
-                createImage: 'Create Image',
-                
-                // Footer
-                footerText: 'More advanced than ever',
-                
-                // Voice
-                voiceStart: 'Voice enabled. Start speaking now...',
-                voiceStop: 'Voice stopped',
-                voiceError: 'Voice not supported in your browser',
-                
-                // Image Mode
-                imageModeOn: 'Image mode enabled',
-                imageModeOff: 'Image mode disabled',
-                
-                // Status
-                active: 'Active',
-                idle: 'Idle'
-            },
-            fr: {
-                // French translations would go here
-            },
-            es: {
-                // Spanish translations would go here
-            },
-            ar: {
-                // Arabic translations would go here
-            }
-        };
+        let isMenuOpen = false;
+        let isDarkMode = true;
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             checkAuthStatus();
-            setupSpeechRecognition();
             setupEventListeners();
             loadTheme();
             loadLanguage();
-            
-            // Health check
             checkServerHealth();
         });
 
         // Setup event listeners
         function setupEventListeners() {
-            // Message input auto-resize
+            // Auto-resize textarea
             const textarea = document.getElementById('messageInput');
             textarea.addEventListener('input', autoResizeTextarea);
             
-            // Language toggle in auth
+            // Auth language buttons
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -1394,23 +1213,6 @@
                     const lang = this.dataset.lang;
                     updateAuthLanguage(lang);
                 });
-            });
-            
-            // Language dropdown
-            document.getElementById('languageToggle').addEventListener('click', toggleLanguageDropdown);
-            document.querySelectorAll('.language-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const lang = this.dataset.lang;
-                    changeLanguage(lang);
-                    document.getElementById('languageDropdown').classList.remove('active');
-                });
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.language-selector')) {
-                    document.getElementById('languageDropdown').classList.remove('active');
-                }
             });
             
             // Auth forms
@@ -1421,69 +1223,27 @@
 
         // Notification System
         function showNotification(message, type = 'info', duration = 5000) {
-            const notification = {
-                id: Date.now(),
-                message,
-                type,
-                duration
-            };
-            
-            notificationQueue.push(notification);
-            processNotificationQueue();
-        }
-
-        function processNotificationQueue() {
-            if (isNotificationShowing || notificationQueue.length === 0) return;
-            
-            isNotificationShowing = true;
-            const notification = notificationQueue.shift();
-            displayNotification(notification);
-        }
-
-        function displayNotification(notification) {
             const container = document.getElementById('notificationContainer');
-            const notificationEl = document.createElement('div');
-            notificationEl.className = `notification ${notification.type}`;
-            notificationEl.id = `notification-${notification.id}`;
-            
-            const icons = {
-                error: 'fas fa-exclamation-circle',
-                success: 'fas fa-check-circle',
-                warning: 'fas fa-exclamation-triangle',
-                info: 'fas fa-info-circle'
-            };
-            
-            notificationEl.innerHTML = `
-                <div class="notification-icon">
-                    <i class="${icons[notification.type]}"></i>
-                </div>
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
                 <div class="notification-content">
-                    <div class="notification-title">${getTranslation(notification.type)}</div>
-                    <div class="notification-message">${notification.message}</div>
+                    <div class="notification-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                    <div class="notification-message">${message}</div>
                 </div>
-                <button class="notification-close" onclick="closeNotification('${notification.id}')">
+                <button class="notification-close" onclick="this.parentElement.remove()">
                     <i class="fas fa-times"></i>
                 </button>
             `;
             
-            container.appendChild(notificationEl);
+            container.appendChild(notification);
             
             // Auto remove
             setTimeout(() => {
-                closeNotification(notification.id);
-            }, notification.duration);
-        }
-
-        function closeNotification(id) {
-            const notification = document.getElementById(`notification-${id}`);
-            if (notification) {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
+                if (notification.parentNode) {
                     notification.remove();
-                    isNotificationShowing = false;
-                    processNotificationQueue();
-                }, 300);
-            }
+                }
+            }, duration);
         }
 
         // Loading overlay
@@ -1496,106 +1256,181 @@
         }
 
         // Language functions
-        function getTranslation(key) {
-            return translations[currentLanguage]?.[key] || translations['sw'][key] || key;
-        }
-
-        function updateUIForLanguage() {
-            // Update all translatable elements
-            document.querySelectorAll('[id^="nav"]').forEach(el => {
-                const key = el.id.replace('nav', '').charAt(0).toLowerCase() + el.id.replace('nav', '').slice(1);
-                if (getTranslation(key)) {
-                    el.textContent = getTranslation(key);
-                }
-            });
-            
-            // Update input placeholder
-            const input = document.getElementById('messageInput');
-            input.placeholder = getTranslation(isImageMode ? 'imagePlaceholder' : 'placeholder');
-            
-            // Update other UI elements
-            document.getElementById('aiDescription').textContent = getTranslation('aiDescription');
-            document.getElementById('footerText').textContent = getTranslation('footerText');
-            document.getElementById('currentLanguage').textContent = currentLanguage === 'sw' ? 'Kiswahili' :
-                currentLanguage === 'en' ? 'English' :
-                currentLanguage === 'fr' ? 'Français' :
-                currentLanguage === 'es' ? 'Español' : 'العربية';
-            
-            // Update welcome message
-            const welcome = document.querySelector('.welcome-message');
-            if (welcome) {
-                welcome.querySelector('h2').textContent = getTranslation('welcomeTitle');
-                welcome.querySelector('p').textContent = getTranslation('welcomeMessage');
-                welcome.querySelectorAll('button')[0].innerHTML = `<i class="fas fa-robot"></i> ${getTranslation('learnAbout')}`;
-                welcome.querySelectorAll('button')[1].innerHTML = `<i class="fas fa-lightbulb"></i> ${getTranslation('suggest')}`;
-                welcome.querySelectorAll('button')[2].innerHTML = `<i class="fas fa-image"></i> ${getTranslation('createImage')}`;
-            }
-        }
-
         function changeLanguage(lang) {
             currentLanguage = lang;
             localStorage.setItem('sila_language', lang);
-            
-            // Update active class
-            document.querySelectorAll('.language-option').forEach(option => {
-                option.classList.toggle('active', option.dataset.lang === lang);
-            });
-            
-            // Update UI
+            document.getElementById('currentLanguage').textContent = lang.toUpperCase();
             updateUIForLanguage();
             
-            // Save to server if logged in
-            if (currentUser && authToken) {
-                fetch(`${API_URL}/api/update-language`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({ language: lang })
-                }).catch(() => {
-                    // Silent fail
-                });
+            // Update voice recognition language
+            if (recognition) {
+                recognition.lang = lang === 'sw' ? 'sw-TZ' : 'en-US';
             }
             
-            showNotification(getTranslation('languageChanged'), 'success');
+            showNotification(
+                lang === 'sw' ? 'Lugha imebadilishwa kuwa Kiswahili' : 'Language changed to English',
+                'success'
+            );
         }
 
-        function loadLanguage() {
-            const savedLang = localStorage.getItem('sila_language') || 'sw';
-            changeLanguage(savedLang);
+        function toggleLanguageDropdown() {
+            // Simple toggle between languages
+            const newLang = currentLanguage === 'sw' ? 'en' : 'sw';
+            changeLanguage(newLang);
+        }
+
+        function updateUIForLanguage() {
+            const translations = {
+                sw: {
+                    newChat: 'Mazungumzo Mapya',
+                    history: 'Historia ya Mazungumzo',
+                    upload: 'Pakia Faili',
+                    contact: 'Wasiliana na Developer',
+                    settings: 'Mipangilio',
+                    logout: 'Toka',
+                    placeholder: 'Andika ujumbe wako hapa...',
+                    imagePlaceholder: 'Andika maelezo ya picha...',
+                    welcomeTitle: 'Karibu kwenye Sila AI 2026',
+                    welcomeText: 'Mimi ni Sila AI, msaidizi wako wa kisasa wa 2026. Nina uwezo wa kukumbuka mazungumzo, kutengeneza picha, kusoma faili, na kukusaidia katika kila jambo. Tuongee!',
+                    welcomeLearn: 'Jijulishe',
+                    welcomeSuggest: 'Pendekeza',
+                    welcomeImage: 'Tengeneza Picha',
+                    chatStatus: 'Inatumika',
+                    historyTitle: 'Historia ya Mazungumzo'
+                },
+                en: {
+                    newChat: 'New Chat',
+                    history: 'Chat History',
+                    upload: 'Upload File',
+                    contact: 'Contact Developer',
+                    settings: 'Settings',
+                    logout: 'Logout',
+                    placeholder: 'Type your message here...',
+                    imagePlaceholder: 'Describe the image...',
+                    welcomeTitle: 'Welcome to Sila AI 2026',
+                    welcomeText: 'I am Sila AI, your modern 2026 assistant. I can remember conversations, generate images, read files, and help you with everything. Let\'s talk!',
+                    welcomeLearn: 'Learn About',
+                    welcomeSuggest: 'Suggest',
+                    welcomeImage: 'Create Image',
+                    chatStatus: 'Online',
+                    historyTitle: 'Chat History'
+                }
+            };
+            
+            const trans = translations[currentLanguage] || translations.sw;
+            
+            // Update menu items
+            document.getElementById('menuNewChat').textContent = trans.newChat;
+            document.getElementById('menuHistory').textContent = trans.history;
+            document.getElementById('menuUpload').textContent = trans.upload;
+            document.getElementById('menuContact').textContent = trans.contact;
+            document.getElementById('menuSettings').textContent = trans.settings;
+            document.getElementById('menuLogout').textContent = trans.logout;
+            
+            // Update input placeholder
+            const input = document.getElementById('messageInput');
+            input.placeholder = trans.placeholder;
+            
+            // Update welcome message
+            document.getElementById('welcomeTitle').textContent = trans.welcomeTitle;
+            document.getElementById('welcomeText').textContent = trans.welcomeText;
+            document.getElementById('welcomeLearn').textContent = trans.welcomeLearn;
+            document.getElementById('welcomeSuggest').textContent = trans.welcomeSuggest;
+            document.getElementById('welcomeImage').textContent = trans.welcomeImage;
+            
+            // Update chat status
+            document.getElementById('chatStatus').textContent = trans.chatStatus;
+            
+            // Update history modal title
+            document.getElementById('historyTitle').textContent = trans.historyTitle;
         }
 
         function updateAuthLanguage(lang) {
             currentLanguage = lang;
-            // Update auth form labels
-            document.getElementById('authTitle').textContent = lang === 'sw' ? 'SILA AI 2026' : 'SILA AI 2026';
-            document.getElementById('authSubtitle').textContent = lang === 'sw' ? 'Msaidizi Wako Mwenye Akili wa Kisasa' : 'Your Intelligent Modern Assistant';
+            const translations = {
+                sw: {
+                    loginEmailLabel: 'Barua Pepe',
+                    loginPasswordLabel: 'Nenosiri',
+                    loginButton: 'Ingia',
+                    registerLink: 'Jisajiri',
+                    forgotLink: 'Umesahau nenosiri?',
+                    registerUsernameLabel: 'Jina la Mtumiaji',
+                    registerEmailLabel: 'Barua Pepe',
+                    registerPasswordLabel: 'Nenosiri',
+                    registerConfirmLabel: 'Thibitisha Nenosiri',
+                    registerLanguageLabel: 'Chagua Lugha',
+                    registerButton: 'Jisajiri',
+                    loginLink: 'Tayari una akaunti? Ingia',
+                    forgotEmailLabel: 'Barua Pepe Yako',
+                    forgotButton: 'Tuma Maelekezo',
+                    backToLoginLink: 'Rudi kwenye kuingia'
+                },
+                en: {
+                    loginEmailLabel: 'Email',
+                    loginPasswordLabel: 'Password',
+                    loginButton: 'Login',
+                    registerLink: 'Register',
+                    forgotLink: 'Forgot Password?',
+                    registerUsernameLabel: 'Username',
+                    registerEmailLabel: 'Email',
+                    registerPasswordLabel: 'Password',
+                    registerConfirmLabel: 'Confirm Password',
+                    registerLanguageLabel: 'Choose Language',
+                    registerButton: 'Register',
+                    loginLink: 'Already have an account? Login',
+                    forgotEmailLabel: 'Your Email',
+                    forgotButton: 'Send Instructions',
+                    backToLoginLink: 'Back to Login'
+                }
+            };
             
-            const trans = translations[lang];
-            if (trans) {
-                document.getElementById('loginEmailLabel').textContent = trans.email;
-                document.getElementById('loginPasswordLabel').textContent = trans.password;
-                document.getElementById('loginButton').textContent = trans.login;
-                document.getElementById('registerLink').textContent = trans.register;
-                document.getElementById('forgotLink').textContent = trans.forgotPassword;
-                
-                document.getElementById('registerUsernameLabel').textContent = trans.username;
-                document.getElementById('registerEmailLabel').textContent = trans.email;
-                document.getElementById('registerPasswordLabel').textContent = trans.password;
-                document.getElementById('registerConfirmLabel').textContent = trans.confirmPassword;
-                document.getElementById('registerLanguageLabel').textContent = lang === 'sw' ? 'Chagua Lugha' : 'Choose Language';
-                document.getElementById('registerButton').textContent = trans.register;
-                document.getElementById('loginLink').textContent = trans.haveAccount;
-                
-                document.getElementById('forgotEmailLabel').textContent = trans.email;
-                document.getElementById('forgotButton').textContent = lang === 'sw' ? 'Tuma Maelekezo' : 'Send Instructions';
-                document.getElementById('backToLoginLink').textContent = trans.backToLogin;
+            const trans = translations[lang] || translations.sw;
+            
+            // Update auth form labels
+            Object.keys(trans).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = trans[key];
+                }
+            });
+        }
+
+        // Theme functions
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.style.backgroundColor = isDarkMode ? '#0B0B0B' : '#FFFFFF';
+            document.body.style.color = isDarkMode ? '#FFFFFF' : '#000000';
+            
+            const themeIcon = document.querySelector('.header-btn i');
+            themeIcon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
+            
+            localStorage.setItem('sila_theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('sila_theme') || 'dark';
+            isDarkMode = savedTheme === 'dark';
+            
+            if (!isDarkMode) {
+                document.body.style.backgroundColor = '#FFFFFF';
+                document.body.style.color = '#000000';
+                document.querySelector('.header-btn i').className = 'fas fa-sun';
             }
         }
 
-        function toggleLanguageDropdown() {
-            document.getElementById('languageDropdown').classList.toggle('active');
+        // Menu functions
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            const sidebar = document.getElementById('sidebarMenu');
+            const chatContainer = document.getElementById('chatContainer');
+            
+            if (isMenuOpen) {
+                sidebar.classList.add('active');
+                chatContainer.classList.add('menu-open');
+            } else {
+                sidebar.classList.remove('active');
+                chatContainer.classList.remove('menu-open');
+            }
         }
 
         // Authentication functions
@@ -1621,7 +1456,7 @@
                         showAuthPage();
                     }
                 } catch (error) {
-                    showNotification(getTranslation('networkError'), 'error');
+                    showNotification('Hitilafu ya mtandao. Tafadhali angalia muunganisho wako.', 'error');
                     showAuthPage();
                 }
             } else {
@@ -1653,13 +1488,13 @@
                     localStorage.setItem('sila_token', authToken);
                     localStorage.setItem('sila_user', JSON.stringify(currentUser));
                     
-                    showNotification(data.message, 'success');
+                    showNotification('Umeingia kikamilifu!', 'success');
                     showChatPage();
                 } else {
-                    showNotification(data.error || getTranslation('authError'), 'error');
+                    showNotification(data.error || 'Barua pepe au nenosiri sio sahihi', 'error');
                 }
             } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
+                showNotification('Hitilafu ya mtandao. Tafadhali jaribu tena.', 'error');
             } finally {
                 hideLoading();
             }
@@ -1677,13 +1512,7 @@
             
             // Validation
             if (password !== confirmPassword) {
-                showNotification(currentLanguage === 'sw' ? 'Nenosiri halifanani!' : 'Passwords do not match!', 'error');
-                hideLoading();
-                return;
-            }
-            
-            if (password.length < 6) {
-                showNotification(currentLanguage === 'sw' ? 'Nenosiri lazima liwe na angalau herufi 6' : 'Password must be at least 6 characters', 'error');
+                showNotification('Nenosiri halifanani!', 'error');
                 hideLoading();
                 return;
             }
@@ -1698,13 +1527,13 @@
                 const data = await response.json();
                 
                 if (response.ok && data.success) {
-                    showNotification(data.message, 'success');
+                    showNotification('Akaunti imeundwa kikamilifu!', 'success');
                     showLogin();
                 } else {
-                    showNotification(data.error || getTranslation('authError'), 'error');
+                    showNotification(data.error || 'Hitilafu katika kujiandikisha', 'error');
                 }
             } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
+                showNotification('Hitilafu ya mtandao. Tafadhali jaribu tena.', 'error');
             } finally {
                 hideLoading();
             }
@@ -1717,6 +1546,7 @@
             const email = document.getElementById('forgotEmail').value.trim();
             
             try {
+                // This endpoint needs to be implemented on the server
                 const response = await fetch(`${API_URL}/api/forgot-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1725,14 +1555,19 @@
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
-                    showNotification(data.message, 'success');
+                if (response.ok) {
+                    showNotification(
+                        currentLanguage === 'sw' 
+                            ? 'Maelekezo yametumwa kwenye email yako' 
+                            : 'Instructions sent to your email',
+                        'success'
+                    );
                     showLogin();
                 } else {
-                    showNotification(data.error || getTranslation('authError'), 'error');
+                    showNotification(data.error || 'Hitilafu katika kutuma maelekezo', 'error');
                 }
             } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
+                showNotification('Hitilafu ya mtandao. Tafadhali jaribu tena.', 'error');
             } finally {
                 hideLoading();
             }
@@ -1742,6 +1577,7 @@
         function showAuthPage() {
             document.getElementById('auth-page').style.display = 'flex';
             document.getElementById('chat-page').style.display = 'none';
+            showLogin();
         }
 
         function showChatPage() {
@@ -1749,43 +1585,37 @@
             document.getElementById('chat-page').style.display = 'block';
             
             if (currentUser) {
-                document.getElementById('username').textContent = currentUser.username;
-                document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
-                document.getElementById('userStatus').textContent = getTranslation('active');
+                document.getElementById('menuUsername').textContent = currentUser.username;
+                document.getElementById('menuEmail').textContent = currentUser.email;
+                document.getElementById('menuAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
             }
             
             updateUIForLanguage();
-            loadWelcomeMessage();
+            closeMenu();
         }
 
         function showLogin() {
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('register-form').style.display = 'none';
             document.getElementById('forgot-password-form').style.display = 'none';
-            clearFormErrors();
         }
 
         function showRegister() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'block';
             document.getElementById('forgot-password-form').style.display = 'none';
-            clearFormErrors();
         }
 
         function showForgotPassword() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'none';
             document.getElementById('forgot-password-form').style.display = 'block';
-            clearFormErrors();
         }
 
-        function clearFormErrors() {
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.textContent = '';
-            });
-            document.querySelectorAll('.form-control').forEach(el => {
-                el.classList.remove('error');
-            });
+        function closeMenu() {
+            isMenuOpen = false;
+            document.getElementById('sidebarMenu').classList.remove('active');
+            document.getElementById('chatContainer').classList.remove('menu-open');
         }
 
         // Chat functions
@@ -1796,7 +1626,7 @@
         function autoResizeTextarea() {
             const textarea = document.getElementById('messageInput');
             textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
         }
 
         function handleKeyDown(e) {
@@ -1813,7 +1643,7 @@
             if (!message) return;
             
             // Add user message to chat
-            addMessage('user', message);
+            addMessage('outgoing', message);
             input.value = '';
             input.style.height = 'auto';
             
@@ -1840,54 +1670,59 @@
                 // Remove typing indicator
                 removeTypingIndicator();
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     if (data.isImage && data.imageUrl) {
                         addImageMessage(data.imageUrl, message);
+                        showNotification(
+                            currentLanguage === 'sw' ? 'Picha imetengenezwa!' : 'Image generated!',
+                            'success'
+                        );
                     } else {
-                        addMessage('assistant', data.response);
-                        // speakText(data.response); // Uncomment for text-to-speech
-                    }
-                    
-                    if (data.isImage) {
-                        showNotification(getTranslation('imageGenerated'), 'success');
+                        addMessage('incoming', data.response);
                     }
                 } else {
-                    addMessage('assistant', data.error || getTranslation('serverError'));
-                    showNotification(data.error || getTranslation('serverError'), 'error');
+                    addMessage('incoming', data.error || data.response || 
+                        (currentLanguage === 'sw' ? 'Samahani, kuna hitilafu.' : 'Sorry, an error occurred.'));
+                    
+                    if (data.error) {
+                        showNotification(data.error, 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Send message error:', error);
                 removeTypingIndicator();
-                addMessage('assistant', getTranslation('networkError'));
-                showNotification(getTranslation('networkError'), 'error');
+                addMessage('incoming', 
+                    currentLanguage === 'sw' 
+                    ? 'Hitilafu ya mtandao. Tafadhali angalia muunganisho wako.' 
+                    : 'Network error. Please check your connection.'
+                );
+                showNotification(
+                    currentLanguage === 'sw' 
+                    ? 'Hitilafu ya mtandao. Tafadhali jaribu tena.' 
+                    : 'Network error. Please try again.',
+                    'error'
+                );
             }
         }
 
-        function addMessage(role, content) {
+        function addMessage(type, content) {
             const container = document.getElementById('messagesContainer');
             
             // Remove welcome message if it's the first user message
             const welcomeMessage = container.querySelector('.welcome-message');
-            if (welcomeMessage && role === 'user') {
+            if (welcomeMessage && type === 'outgoing') {
                 welcomeMessage.remove();
             }
             
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            
-            const avatar = role === 'user' 
-                ? (currentUser?.username?.charAt(0).toUpperCase() || 'U') 
-                : 'S';
+            messageDiv.className = `message ${type}`;
             
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             messageDiv.innerHTML = `
-                <div class="message-avatar">${avatar}</div>
-                <div class="message-content">
-                    <div class="message-text">${formatMessage(content)}</div>
-                    <div class="message-time">${timeString}</div>
-                </div>
+                <div class="message-bubble">${formatMessage(content)}</div>
+                <div class="message-time">${timeString}</div>
             `;
             
             container.appendChild(messageDiv);
@@ -1897,21 +1732,22 @@
         function addImageMessage(imageUrl, prompt) {
             const container = document.getElementById('messagesContainer');
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'message assistant';
+            messageDiv.className = 'message incoming';
             
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             messageDiv.innerHTML = `
-                <div class="message-avatar">S</div>
-                <div class="message-content image-message">
-                    <div class="message-text">
-                        <p><strong>${currentLanguage === 'sw' ? 'Maelezo:' : 'Prompt:'}</strong> ${prompt}</p>
-                        <img src="${imageUrl}" alt="Generated image" onerror="this.onerror=null; this.src='https://via.placeholder.com/512x512/7c3aed/ffffff?text=Image+Error'">
-                        <p style="margin-top: 10px; font-style: italic;">${currentLanguage === 'sw' ? 'Picha imetengenezwa!' : 'Image generated!'}</p>
+                <div class="message-bubble">
+                    <div class="image-message">
+                        <img src="${imageUrl}" alt="Generated image" 
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/007AFF/ffffff?text=Image+Error'">
+                        <div class="image-prompt">
+                            <strong>${currentLanguage === 'sw' ? 'Maelezo:' : 'Prompt:'}</strong> ${prompt}
+                        </div>
                     </div>
-                    <div class="message-time">${timeString}</div>
                 </div>
+                <div class="message-time">${timeString}</div>
             `;
             
             container.appendChild(messageDiv);
@@ -1921,18 +1757,14 @@
         function showTypingIndicator() {
             const container = document.getElementById('messagesContainer');
             const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant';
+            typingDiv.className = 'message incoming';
             typingDiv.id = 'typingIndicator';
             
             typingDiv.innerHTML = `
-                <div class="message-avatar">S</div>
-                <div class="message-content">
-                    <div class="typing-indicator">
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                        <span style="margin-left: 8px; color: var(--text-secondary); font-size: 0.875rem;">${getTranslation('typing')}</span>
-                    </div>
+                <div class="typing-indicator">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
                 </div>
             `;
             
@@ -1948,18 +1780,18 @@
         }
 
         function formatMessage(text) {
-            // Convert URLs to clickable links
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
             return text
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(urlRegex, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
-                .replace(/\n/g, '<br>');
+                .replace(/\n/g, '<br>')
+                .replace(/(https?:\/\/[^\s]+)/g, url => 
+                    `<a href="${url}" target="_blank" style="color: inherit; text-decoration: underline;">${url}</a>`
+                );
         }
 
         // Voice functions
-        function setupSpeechRecognition() {
+        function setupVoiceRecognition() {
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 recognition = new SpeechRecognition();
@@ -1975,11 +1807,12 @@
                 
                 recognition.onerror = (event) => {
                     console.error('Voice recognition error:', event.error);
-                    showNotification(getTranslation('voiceError'), 'error');
-                    stopVoiceRecording();
-                };
-                
-                recognition.onend = () => {
+                    showNotification(
+                        currentLanguage === 'sw' 
+                            ? 'Sauti haitumiki kwenye browser yako' 
+                            : 'Voice not supported in your browser',
+                        'error'
+                    );
                     stopVoiceRecording();
                 };
             }
@@ -1987,7 +1820,16 @@
 
         function toggleVoiceInput() {
             if (!recognition) {
-                showNotification(getTranslation('voiceError'), 'error');
+                setupVoiceRecognition();
+            }
+            
+            if (!recognition) {
+                showNotification(
+                    currentLanguage === 'sw' 
+                        ? 'Sauti haitumiki kwenye browser yako' 
+                        : 'Voice not supported in your browser',
+                    'error'
+                );
                 return;
             }
             
@@ -2006,12 +1848,22 @@
                 
                 const voiceBtn = document.getElementById('voiceBtn');
                 voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                voiceBtn.classList.add('danger');
-                voiceBtn.classList.remove('success');
+                voiceBtn.classList.add('recording');
+                voiceBtn.classList.remove('voice');
                 
-                showNotification(getTranslation('voiceStart'), 'info');
+                showNotification(
+                    currentLanguage === 'sw' 
+                        ? 'Anza kusema sasa...' 
+                        : 'Start speaking now...',
+                    'info'
+                );
             } catch (error) {
-                showNotification(getTranslation('voiceError'), 'error');
+                showNotification(
+                    currentLanguage === 'sw' 
+                        ? 'Hitilafu ya kuanza sauti' 
+                        : 'Error starting voice',
+                    'error'
+                );
             }
         }
 
@@ -2023,19 +1875,8 @@
             
             const voiceBtn = document.getElementById('voiceBtn');
             voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-            voiceBtn.classList.remove('danger');
-            voiceBtn.classList.add('success');
-        }
-
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = currentLanguage === 'sw' ? 'sw-TZ' : 'en-US';
-                utterance.rate = 1;
-                utterance.pitch = 1;
-                utterance.volume = 0.8;
-                speechSynthesis.speak(utterance);
-            }
+            voiceBtn.classList.remove('recording');
+            voiceBtn.classList.add('voice');
         }
 
         // Navigation functions
@@ -2043,28 +1884,34 @@
             currentSessionId = generateSessionId();
             document.getElementById('messagesContainer').innerHTML = `
                 <div class="welcome-message">
-                    <div style="font-size: 5rem; margin-bottom: 24px; background: linear-gradient(45deg, #7c3aed, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <div class="welcome-icon">
                         <i class="fas fa-comment-medical"></i>
                     </div>
-                    <h2 style="font-size: 2.5rem; margin-bottom: 16px; background: linear-gradient(45deg, #7c3aed, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        ${getTranslation('newChat')}
+                    <h2 class="welcome-title" id="welcomeTitle">
+                        ${currentLanguage === 'sw' ? 'Mazungumzo Mapya' : 'New Chat'}
                     </h2>
-                    <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px;">
-                        ${currentLanguage === 'sw' ? 'Anza mazungumzo mapya na Sila AI. Nipo hapa kukusaidia!' : 'Start a new conversation with Sila AI. I\'m here to help!'}
+                    <p class="welcome-text" id="welcomeText">
+                        ${currentLanguage === 'sw' 
+                            ? 'Anza mazungumzo mapya na Sila AI. Nipo hapa kukusaidia!' 
+                            : 'Start a new conversation with Sila AI. I\'m here to help!'}
                     </p>
-                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                        <button class="action-btn secondary" onclick="suggestPrompt('uniambie kuhusu wewe')" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                            <i class="fas fa-robot"></i> ${getTranslation('learnAbout')}
+                    <div class="welcome-actions">
+                        <button class="welcome-btn" onclick="suggestPrompt('uniambie kuhusu wewe')">
+                            <i class="fas fa-robot"></i>
+                            <span id="welcomeLearn">${currentLanguage === 'sw' ? 'Jijulishe' : 'Learn About'}</span>
                         </button>
-                        <button class="action-btn success" onclick="suggestPrompt('nisaidie kutengeneza mpango wa kazi')" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                            <i class="fas fa-lightbulb"></i> ${getTranslation('suggest')}
+                        <button class="welcome-btn" onclick="suggestPrompt('nisaidie kutengeneza mpango wa kazi')">
+                            <i class="fas fa-lightbulb"></i>
+                            <span id="welcomeSuggest">${currentLanguage === 'sw' ? 'Pendekeza' : 'Suggest'}</span>
                         </button>
-                        <button class="action-btn" onclick="toggleImageMode()" style="border-radius: var(--radius); padding: 12px 24px; width: auto;">
-                            <i class="fas fa-image"></i> ${getTranslation('createImage')}
+                        <button class="welcome-btn" onclick="toggleImageMode()">
+                            <i class="fas fa-image"></i>
+                            <span id="welcomeImage">${currentLanguage === 'sw' ? 'Tengeneza Picha' : 'Create Image'}</span>
                         </button>
                     </div>
                 </div>
             `;
+            closeMenu();
         }
 
         function suggestPrompt(prompt) {
@@ -2083,7 +1930,7 @@
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     const historyList = document.getElementById('historyList');
                     historyList.innerHTML = '';
                     
@@ -2091,43 +1938,43 @@
                         historyList.innerHTML = `
                             <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
                                 <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
-                                <p style="font-size: 1.1rem;">${getTranslation('noHistory')}</p>
+                                <p style="font-size: 1.1rem;">
+                                    ${currentLanguage === 'sw' ? 'Hakuna historia ya mazungumzo' : 'No chat history'}
+                                </p>
                             </div>
                         `;
                     } else {
                         data.conversations.forEach(conv => {
                             const convElement = document.createElement('div');
-                            convElement.className = 'nav-btn';
-                            convElement.style.marginBottom = '8px';
+                            convElement.className = 'history-item';
                             convElement.innerHTML = `
-                                <i class="fas fa-comments"></i>
-                                <span style="flex: 1; text-align: left;">${conv.title || 'Mazungumzo'}</span>
-                                <small style="color: var(--text-secondary); font-size: 0.75rem;">
-                                    ${new Date(conv.updatedAt).toLocaleDateString()}
-                                </small>
+                                <div class="history-item-title">
+                                    ${conv.title || (currentLanguage === 'sw' ? 'Mazungumzo' : 'Chat')}
+                                </div>
+                                <div class="history-item-date">
+                                    ${new Date(conv.updatedAt).toLocaleDateString()} - 
+                                    ${conv.messages?.length || 0} ${currentLanguage === 'sw' ? 'ujumbe' : 'messages'}
+                                </div>
                             `;
                             convElement.onclick = () => loadConversation(conv.sessionId);
                             historyList.appendChild(convElement);
                         });
                     }
                     
-                    // Update modal texts
-                    document.getElementById('historyTitle').textContent = getTranslation('historyTitle');
-                    document.getElementById('clearHistoryText').textContent = getTranslation('clearHistory');
-                    
-                    document.getElementById('historyModal').style.display = 'flex';
+                    document.getElementById('historyModal').classList.add('active');
+                    closeMenu();
                 } else {
-                    showNotification(data.error || getTranslation('serverError'), 'error');
+                    showNotification(data.error || 'Hitilafu katika kupakia historia', 'error');
                 }
             } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
+                showNotification('Hitilafu ya mtandao', 'error');
             } finally {
                 hideLoading();
             }
         }
 
         function closeHistoryModal() {
-            document.getElementById('historyModal').style.display = 'none';
+            document.getElementById('historyModal').classList.remove('active');
         }
 
         async function loadConversation(sessionId) {
@@ -2141,7 +1988,7 @@
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     currentSessionId = sessionId;
                     
                     const container = document.getElementById('messagesContainer');
@@ -2152,45 +1999,21 @@
                             if (msg.isImage) {
                                 addImageMessage(msg.imageUrl, msg.content);
                             } else {
-                                addMessage(msg.role, msg.content);
+                                addMessage(msg.role === 'user' ? 'outgoing' : 'incoming', msg.content);
                             }
                         }
                     });
                     
                     closeHistoryModal();
-                    showNotification(currentLanguage === 'sw' ? 'Mazungumzo yamepakuliwa' : 'Conversation loaded', 'success');
+                    showNotification(
+                        currentLanguage === 'sw' ? 'Mazungumzo yamepakuliwa' : 'Conversation loaded',
+                        'success'
+                    );
                 } else {
-                    showNotification(data.error || getTranslation('serverError'), 'error');
+                    showNotification(data.error || 'Hitilafu katika kupakia mazungumzo', 'error');
                 }
             } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function clearHistory() {
-            if (!confirm(getTranslation('deleteConfirm'))) return;
-            
-            showLoading();
-            try {
-                // Note: You'll need to implement this endpoint on the server
-                const response = await fetch(`${API_URL}/api/clear-history`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
-                
-                if (response.ok) {
-                    showNotification(currentLanguage === 'sw' ? 'Historia imefutwa' : 'History cleared', 'success');
-                    closeHistoryModal();
-                    newChat();
-                } else {
-                    showNotification(getTranslation('serverError'), 'error');
-                }
-            } catch (error) {
-                showNotification(getTranslation('networkError'), 'error');
+                showNotification('Hitilafu ya mtandao', 'error');
             } finally {
                 hideLoading();
             }
@@ -2198,6 +2021,7 @@
 
         function uploadFile() {
             document.getElementById('fileInput').click();
+            closeMenu();
         }
 
         async function handleFileUpload() {
@@ -2223,14 +2047,21 @@
                     
                     const data = await response.json();
                     
-                    if (response.ok && data.success) {
-                        addMessage('user', `${currentLanguage === 'sw' ? 'Nimepakia faili:' : 'Uploaded file:'} ${file.name}`);
-                        showNotification(getTranslation('fileUploaded'), 'success');
+                    if (data.success) {
+                        addMessage('outgoing', 
+                            currentLanguage === 'sw' 
+                                ? `Nimepakia faili: ${file.name}` 
+                                : `Uploaded file: ${file.name}`
+                        );
+                        showNotification(
+                            currentLanguage === 'sw' ? 'Faili imepakiwa kikamilifu' : 'File uploaded successfully',
+                            'success'
+                        );
                     } else {
-                        showNotification(data.error || getTranslation('serverError'), 'error');
+                        showNotification(data.error || 'Hitilafu katika kupakia faili', 'error');
                     }
                 } catch (error) {
-                    showNotification(getTranslation('networkError'), 'error');
+                    showNotification('Hitilafu ya mtandao', 'error');
                 }
             }
             
@@ -2240,46 +2071,44 @@
 
         function contactDeveloper() {
             window.open('https://wa.me/255789661031?text=Hello%20Developer%20Sila', '_blank');
+            closeMenu();
+        }
+
+        function showSettings() {
+            // Simple settings notification
+            showNotification(
+                currentLanguage === 'sw' 
+                    ? 'Mipangilio haijaanzishwa bado. Itapatikana hivi karibuni!' 
+                    : 'Settings not implemented yet. Coming soon!',
+                'info'
+            );
+            closeMenu();
         }
 
         function toggleImageMode() {
             isImageMode = !isImageMode;
             const imageBtn = document.getElementById('imageModeBtn');
             const input = document.getElementById('messageInput');
-            const actions = document.getElementById('inputActions');
-            const modeText = document.getElementById('modeText');
             
             if (isImageMode) {
                 imageBtn.classList.add('active');
-                input.placeholder = getTranslation('imagePlaceholder');
-                actions.style.display = 'block';
-                modeText.textContent = getTranslation('imageModeOn');
-                showNotification(getTranslation('imageModeOn'), 'info');
+                input.placeholder = currentLanguage === 'sw' 
+                    ? 'Andika maelezo ya picha unayotaka...' 
+                    : 'Describe the image you want...';
+                showNotification(
+                    currentLanguage === 'sw' ? 'Hali ya picha imewashwa' : 'Image mode enabled',
+                    'info'
+                );
             } else {
                 imageBtn.classList.remove('active');
-                input.placeholder = getTranslation('placeholder');
-                actions.style.display = 'none';
-                modeText.textContent = getTranslation('imageModeOff');
-                showNotification(getTranslation('imageModeOff'), 'info');
+                input.placeholder = currentLanguage === 'sw' 
+                    ? 'Andika ujumbe wako hapa...' 
+                    : 'Type your message here...';
+                showNotification(
+                    currentLanguage === 'sw' ? 'Hali ya picha imezimwa' : 'Image mode disabled',
+                    'info'
+                );
             }
-        }
-
-        // Theme functions
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('sila_theme', newTheme);
-            
-            const themeIcon = document.querySelector('.theme-toggle i');
-            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('sila_theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            const themeIcon = document.querySelector('.theme-toggle i');
-            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
 
         // Server health check
@@ -2287,28 +2116,35 @@
             try {
                 const response = await fetch(`${API_URL}/api/health`);
                 if (response.ok) {
-                    document.getElementById('aiStatus').textContent = getTranslation('online');
-                    document.getElementById('aiStatus').style.color = '#10b981';
+                    document.getElementById('chatStatus').textContent = 
+                        currentLanguage === 'sw' ? 'Inatumika' : 'Online';
                 }
             } catch (error) {
-                document.getElementById('aiStatus').textContent = getTranslation('offline');
-                document.getElementById('aiStatus').style.color = '#ef4444';
-                showNotification(getTranslation('disconnected'), 'warning');
+                document.getElementById('chatStatus').textContent = 
+                    currentLanguage === 'sw' ? 'Haitumiki' : 'Offline';
             }
         }
 
-        function loadWelcomeMessage() {
-            // Already loaded in showChatPage
+        function loadLanguage() {
+            const savedLang = localStorage.getItem('sila_language') || 'sw';
+            changeLanguage(savedLang);
         }
 
         function logout() {
-            if (confirm(currentLanguage === 'sw' ? 'Unahakika unataka kutoka?' : 'Are you sure you want to logout?')) {
+            if (confirm(
+                currentLanguage === 'sw' 
+                    ? 'Unahakika unataka kutoka?' 
+                    : 'Are you sure you want to logout?'
+            )) {
                 localStorage.removeItem('sila_token');
                 localStorage.removeItem('sila_user');
                 currentUser = null;
                 authToken = null;
                 showAuthPage();
-                showNotification(currentLanguage === 'sw' ? 'Umetoka kikamilifu' : 'Logged out successfully', 'info');
+                showNotification(
+                    currentLanguage === 'sw' ? 'Umetoka kikamilifu' : 'Logged out successfully',
+                    'info'
+                );
             }
         }
     </script>
