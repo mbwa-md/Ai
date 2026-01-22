@@ -51,27 +51,17 @@ const ConversationSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now },
     isImage: { type: Boolean, default: false },
     imageUrl: String,
-    language: String
+    language: String,
+    isVoice: { type: Boolean, default: false },
+    audioUrl: String
   }],
   title: { type: String, default: 'New Chat' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
 
-const AdminSettingsSchema = new mongoose.Schema({
-  adminPin: { type: String, default: 'sila0022' },
-  aiName: { type: String, default: 'Sila AI' },
-  aiPersonality: { type: String, default: 'Ninasema Kiswahili na Kiingereza, ni msaidizi wenye uelewa mkuu, mwenye huruma na ufasaha.' },
-  apiEndpoints: {
-    chat: { type: String, default: 'https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(q.trim())}' },
-    think: { type: String, default: 'https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(q.trim())}' },
-    image: { type: String, default: 'https://api.siputzx.my.id/api/ai/magicstudio' }
-  }
-});
-
 const User = mongoose.model('User', UserSchema);
 const Conversation = mongoose.model('Conversation', ConversationSchema);
-const AdminSettings = mongoose.model('AdminSettings', AdminSettingsSchema);
 
 // Middleware
 app.use(cors({
@@ -82,7 +72,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 app.use(session({
-  secret: 'sila_ai_secret_key_2026_v2',
+  secret: 'sila_ai_secret_key_2026_v3',
   resave: true,
   saveUninitialized: true,
   store: MongoStore.create({
@@ -92,7 +82,7 @@ app.use(session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: false // Set to true in production
+    secure: false
   }
 }));
 
@@ -107,8 +97,76 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ 
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+  limits: { fileSize: 50 * 1024 * 1024 }
 });
+
+// Helper Functions for APIs
+const callChatAPI = async (message) => {
+  try {
+    console.log('📞 Calling Chat API with message:', message);
+    const response = await axios.get(`https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(message.trim())}`);
+    console.log('✅ Chat API Response:', response.data ? 'Received' : 'Empty');
+    return response.data || 'Nimekushindikania kujibu. Tafadhali jaribu tena.';
+  } catch (error) {
+    console.error('❌ Chat API Error:', error.message);
+    return 'Samahani, kuna shida na API ya mazungumzo. Tafadhali jaribu tena baadae.';
+  }
+};
+
+const callThinkAPI = async (message) => {
+  try {
+    console.log('🤔 Calling Think API with message:', message);
+    const response = await axios.get(`https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(message.trim())}`);
+    console.log('✅ Think API Response:', response.data ? 'Received' : 'Empty');
+    return response.data || '';
+  } catch (error) {
+    console.error('❌ Think API Error:', error.message);
+    return '';
+  }
+};
+
+const callImageAPI = async (prompt) => {
+  try {
+    console.log('🎨 Calling Image API with prompt:', prompt);
+    // Try multiple image APIs
+    const apis = [
+      `https://api.siputzx.my.id/api/ai/magicstudio?prompt=${encodeURIComponent(prompt)}`,
+      `https://api.siputzx.my.id/api/tools/lexica?prompt=${encodeURIComponent(prompt)}`,
+      `https://api.siputzx.my.id/api/tools/aiimage?prompt=${encodeURIComponent(prompt)}`
+    ];
+    
+    for (const apiUrl of apis) {
+      try {
+        const response = await axios.get(apiUrl, { timeout: 30000 });
+        if (response.data && (response.data.image || response.data.url || typeof response.data === 'string')) {
+          console.log('✅ Image API Success from:', apiUrl);
+          return response.data.image || response.data.url || response.data;
+        }
+      } catch (apiError) {
+        console.warn(`⚠️ Image API failed (${apiUrl}):`, apiError.message);
+        continue;
+      }
+    }
+    
+    throw new Error('All image APIs failed');
+  } catch (error) {
+    console.error('❌ All Image APIs Error:', error.message);
+    // Return placeholder image
+    return `https://via.placeholder.com/512x512/007AFF/ffffff?text=${encodeURIComponent('Image+Error:' + prompt.substring(0, 20))}`;
+  }
+};
+
+const callVoiceAPI = async (text) => {
+  try {
+    console.log('🔊 Calling Voice API with text:', text.substring(0, 50) + '...');
+    const response = await axios.get(`https://api.siputzx.my.id/api/tools/ttsgoogle?text=${encodeURIComponent(text.trim())}`);
+    console.log('✅ Voice API Response:', response.data ? 'Received' : 'Empty');
+    return response.data || null;
+  } catch (error) {
+    console.error('❌ Voice API Error:', error.message);
+    return null;
+  }
+};
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -154,38 +212,6 @@ const auth = async (req, res, next) => {
   }
 };
 
-// Admin Panel Route (Public with PIN)
-app.post('/admin/login', async (req, res) => {
-  try {
-    const { pin } = req.body;
-    const settings = await AdminSettings.findOne();
-    
-    if (!settings || pin !== settings.adminPin) {
-      return res.status(401).json({ 
-        success: false,
-        error: 'Pini ya admin sio sahihi'
-      });
-    }
-    
-    // Create admin session
-    const adminToken = jwt.sign({ 
-      admin: true, 
-      timestamp: Date.now() 
-    }, 'sila_admin_secret_2026');
-    
-    res.json({ 
-      success: true, 
-      token: adminToken,
-      message: 'Umeingia kwenye admin panel'
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false,
-      error: 'Hitilafu ya mtandao' 
-    });
-  }
-});
-
 // Admin middleware
 const adminAuth = async (req, res, next) => {
   try {
@@ -229,7 +255,6 @@ app.post('/api/register', async (req, res) => {
   try {
     const { username, email, password, language = 'sw' } = req.body;
     
-    // Validate input
     if (!username || !email || !password) {
       return res.status(400).json({ 
         success: false,
@@ -244,7 +269,6 @@ app.post('/api/register', async (req, res) => {
       });
     }
     
-    // Check if user exists
     const existingUser = await User.findOne({ 
       $or: [{ email: email.toLowerCase() }, { username }] 
     });
@@ -258,10 +282,8 @@ app.post('/api/register', async (req, res) => {
       });
     }
     
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
     
-    // Create user
     const user = new User({
       username,
       email: email.toLowerCase(),
@@ -271,7 +293,6 @@ app.post('/api/register', async (req, res) => {
     
     await user.save();
     
-    // Generate token
     const token = jwt.sign({ 
       userId: user._id,
       email: user.email 
@@ -351,13 +372,12 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 2. Chat & AI Functions - FIXED APIs
+// 2. Chat & AI Functions - FIXED WITH WORKING APIs
 app.post('/api/chat', auth, async (req, res) => {
   try {
-    const { message, sessionId, generateImage, language = req.user.language || 'sw' } = req.body;
+    const { message, sessionId, generateImage, generateVoice, language = req.user.language || 'sw' } = req.body;
     const userId = req.user._id;
     
-    // Validate message
     if (!message || message.trim().length === 0) {
       return res.status(400).json({ 
         success: false,
@@ -382,75 +402,35 @@ app.post('/api/chat', auth, async (req, res) => {
       language
     });
     
-    // Save conversation
     conversation.updatedAt = new Date();
     await conversation.save();
     
     let aiResponse;
     let imageUrl = null;
+    let audioUrl = null;
     
     try {
       if (generateImage) {
-        // Generate image - FIXED API CALL
-        const imageResponse = await axios.post(
-          'https://api.siputzx.my.id/api/ai/magicstudio',
-          { prompt: message },
-          { 
-            timeout: 60000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
-          }
-        );
-        
-        // Extract image URL from response
-        imageUrl = imageResponse.data?.image || imageResponse.data?.url || 
-                  (typeof imageResponse.data === 'string' ? imageResponse.data : null);
-        
-        if (!imageUrl) {
-          throw new Error('Hakuna picha iliyotengenezwa');
-        }
-        
+        // Generate image
+        imageUrl = await callImageAPI(message);
         aiResponse = `[Picha imetengenezwa kwa: "${message}"]`;
         
+      } else if (generateVoice) {
+        // Generate voice response
+        const chatResponse = await callChatAPI(message);
+        audioUrl = await callVoiceAPI(chatResponse);
+        aiResponse = chatResponse;
+        
       } else {
-        // Get AI response - FIXED API CALL
-        const chatResponse = await axios.post(
-          'https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(q.trim())}',
-          { text: message },
-          { 
-            timeout: 30000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
-          }
-        );
+        // Get AI response with thinking process
+        const thinkResponse = await callThinkAPI(message);
+        let finalMessage = message;
         
-        // Extract response text
-        aiResponse = chatResponse.data?.response || chatResponse.data?.text || 
-                    chatResponse.data?.message || 
-                    (typeof chatResponse.data === 'string' ? chatResponse.data : 'Nimeshindwa kujibu.');
-        
-        // If no response, try with think API
-        if (!aiResponse || aiResponse.includes('Nimeshindwa')) {
-          const thinkResponse = await axios.post(
-            'https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(q.trim())}',
-            { text: message },
-            { 
-              timeout: 30000,
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              }
-            }
-          );
-          
-          aiResponse = thinkResponse.data?.response || thinkResponse.data?.text || 
-                      thinkResponse.data?.message || 
-                      (typeof thinkResponse.data === 'string' ? thinkResponse.data : 'Nimeshindwa kujibu.');
+        if (thinkResponse && thinkResponse.trim().length > 0) {
+          finalMessage = thinkResponse + ' ' + message;
         }
+        
+        aiResponse = await callChatAPI(finalMessage);
       }
       
       // Add AI response
@@ -459,6 +439,8 @@ app.post('/api/chat', auth, async (req, res) => {
         content: aiResponse,
         isImage: generateImage,
         imageUrl: imageUrl,
+        isVoice: generateVoice,
+        audioUrl: audioUrl,
         language
       });
       
@@ -469,17 +451,19 @@ app.post('/api/chat', auth, async (req, res) => {
         response: aiResponse,
         isImage: generateImage,
         imageUrl: imageUrl,
+        isVoice: generateVoice,
+        audioUrl: audioUrl,
         sessionId,
         language
       });
       
     } catch (apiError) {
-      console.error('AI API Error:', apiError.message);
+      console.error('AI Processing Error:', apiError.message);
       
       // Fallback response
       const fallbackResponse = language === 'sw' 
-        ? 'Samahani, kuna shida na muunganisho wa AI. Tafadhali jaribu tena baadae.'
-        : 'Sorry, there is an issue with the AI connection. Please try again later.';
+        ? 'Samahani, kuna shida na huduma ya AI. Nimeshindwa kukujibu kwa sasa. Tafadhali jaribu tena baadae au badilisha swali lako.'
+        : 'Sorry, there is an issue with the AI service. I failed to respond at the moment. Please try again later or rephrase your question.';
       
       conversation.messages.push({
         role: 'assistant',
@@ -509,6 +493,63 @@ app.post('/api/chat', auth, async (req, res) => {
   }
 });
 
+// Direct API calls for testing
+app.get('/api/test/chat', async (req, res) => {
+  try {
+    const { text } = req.query;
+    if (!text) {
+      return res.status(400).json({ error: 'Text parameter required' });
+    }
+    
+    const response = await callChatAPI(text);
+    res.json({ success: true, response });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/test/think', async (req, res) => {
+  try {
+    const { text } = req.query;
+    if (!text) {
+      return res.status(400).json({ error: 'Text parameter required' });
+    }
+    
+    const response = await callThinkAPI(text);
+    res.json({ success: true, response });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/test/image', async (req, res) => {
+  try {
+    const { prompt } = req.query;
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt parameter required' });
+    }
+    
+    const imageUrl = await callImageAPI(prompt);
+    res.json({ success: true, imageUrl });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/test/voice', async (req, res) => {
+  try {
+    const { text } = req.query;
+    if (!text) {
+      return res.status(400).json({ error: 'Text parameter required' });
+    }
+    
+    const audioUrl = await callVoiceAPI(text);
+    res.json({ success: true, audioUrl });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // 3. Conversation History
 app.get('/api/conversations', auth, async (req, res) => {
   try {
@@ -529,7 +570,6 @@ app.get('/api/conversations', auth, async (req, res) => {
   }
 });
 
-// Get single conversation with all messages (For Admin)
 app.get('/api/conversation/:sessionId', auth, async (req, res) => {
   try {
     const conversation = await Conversation.findOne({
@@ -543,7 +583,6 @@ app.get('/api/conversation/:sessionId', auth, async (req, res) => {
       });
     }
     
-    // Check if user is admin or owns the conversation
     if (!req.user.isAdmin && conversation.userId._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({ 
         success: false,
@@ -592,7 +631,37 @@ app.post('/api/upload', auth, upload.single('file'), (req, res) => {
   }
 });
 
-// 5. Admin Panel APIs - ENHANCED
+// 5. Admin Panel APIs
+app.post('/admin/login', async (req, res) => {
+  try {
+    const { pin } = req.body;
+    
+    // Hardcoded admin PIN
+    if (pin !== 'sila0022') {
+      return res.status(401).json({ 
+        success: false,
+        error: 'Pini ya admin sio sahihi'
+      });
+    }
+    
+    const adminToken = jwt.sign({ 
+      admin: true, 
+      timestamp: Date.now() 
+    }, 'sila_admin_secret_2026');
+    
+    res.json({ 
+      success: true, 
+      token: adminToken,
+      message: 'Umeingia kwenye admin panel'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Hitilafu ya mtandao' 
+    });
+  }
+});
+
 app.get('/api/admin/stats', adminAuth, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -606,7 +675,6 @@ app.get('/api/admin/stats', adminAuth, async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(100);
     
-    // Get all conversations for admin
     const allConversations = await Conversation.find()
       .populate('userId', 'username email')
       .sort({ updatedAt: -1 })
@@ -633,7 +701,6 @@ app.get('/api/admin/stats', adminAuth, async (req, res) => {
   }
 });
 
-// Get user conversations (For Admin)
 app.get('/api/admin/user/:userId/conversations', adminAuth, async (req, res) => {
   try {
     const conversations = await Conversation.find({ userId: req.params.userId })
@@ -652,7 +719,6 @@ app.get('/api/admin/user/:userId/conversations', adminAuth, async (req, res) => 
   }
 });
 
-// Get user details with password (For Admin only)
 app.get('/api/admin/user/:userId/details', adminAuth, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -673,7 +739,6 @@ app.get('/api/admin/user/:userId/details', adminAuth, async (req, res) => {
         language: user.language,
         isAdmin: user.isAdmin,
         createdAt: user.createdAt,
-        // Include password (hashed)
         password: user.password
       }
     });
@@ -685,7 +750,6 @@ app.get('/api/admin/user/:userId/details', adminAuth, async (req, res) => {
   }
 });
 
-// Update user password (For Admin)
 app.post('/api/admin/user/:userId/update-password', adminAuth, async (req, res) => {
   try {
     const { newPassword } = req.body;
@@ -706,7 +770,6 @@ app.post('/api/admin/user/:userId/update-password', adminAuth, async (req, res) 
       });
     }
     
-    // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     user.password = hashedPassword;
     await user.save();
@@ -723,45 +786,19 @@ app.post('/api/admin/user/:userId/update-password', adminAuth, async (req, res) 
   }
 });
 
-app.post('/api/admin/update-pin', adminAuth, async (req, res) => {
-  try {
-    const { newPin } = req.body;
-    
-    if (!newPin || newPin.length < 4) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'Pini ya admin lazima iwe na angalau herufi 4' 
-      });
-    }
-    
-    let settings = await AdminSettings.findOne();
-    if (!settings) {
-      settings = new AdminSettings();
-    }
-    
-    settings.adminPin = newPin;
-    await settings.save();
-    
-    res.json({ 
-      success: true, 
-      message: 'Pini ya admin imesasishwa kikamilifu',
-      newPin
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false,
-      error: 'Hitilafu ya mtandao imetokea' 
-    });
-  }
-});
-
 // 6. Health Check
 app.get('/api/health', (req, res) => {
   res.json({ 
     success: true,
     status: 'healthy',
     timestamp: new Date(),
-    version: '3.0.0'
+    version: '3.2.0',
+    apis: {
+      chat: 'https://api.yupra.my.id/api/ai/gpt5',
+      think: 'https://api.yupra.my.id/api/ai/copilot-think',
+      image: 'https://api.siputzx.my.id/api/ai/magicstudio',
+      voice: 'https://api.siputzx.my.id/api/tools/ttsgoogle'
+    }
   });
 });
 
@@ -775,19 +812,6 @@ app.get('*', (req, res) => {
   }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
-// Initialize Admin Settings
-const initializeAdmin = async () => {
-  try {
-    const settings = await AdminSettings.findOne();
-    if (!settings) {
-      await AdminSettings.create({});
-      console.log('✅ Mipangilio ya admin imesanikishwa');
-    }
-  } catch (error) {
-    console.error('❌ Hitilafu ya kusanikisha admin:', error);
-  }
-};
 
 // WebSocket for real-time chat
 io.on('connection', (socket) => {
@@ -803,9 +827,13 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, async () => {
-  await initializeAdmin();
+server.listen(PORT, () => {
   console.log(`🚀 Sila AI server inatumika kwenye port ${PORT}`);
   console.log(`🌐 Unganisha: http://localhost:${PORT}`);
-  console.log(`👑 Admin Panel: http://localhost:${PORT}/admin?token=ADMIN_TOKEN_HERE`);
+  console.log(`👑 Admin Panel: http://localhost:${PORT}/admin`);
+  console.log(`🤖 APIs Available:`);
+  console.log(`   - Chat: https://api.yupra.my.id/api/ai/gpt5`);
+  console.log(`   - Think: https://api.yupra.my.id/api/ai/copilot-think`);
+  console.log(`   - Image: https://api.siputzx.my.id/api/ai/magicstudio`);
+  console.log(`   - Voice: https://api.siputzx.my.id/api/tools/ttsgoogle`);
 });
