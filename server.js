@@ -63,9 +63,9 @@ const AdminSettingsSchema = new mongoose.Schema({
   aiName: { type: String, default: 'Sila AI' },
   aiPersonality: { type: String, default: 'Ninasema Kiswahili na Kiingereza, ni msaidizi wenye uelewa mkuu, mwenye huruma na ufasaha.' },
   apiEndpoints: {
-    chat: { type: String, default: 'https://api.yupra.my.id/api/ai/gpt5?text=' },
-    think: { type: String, default: 'https://api.yupra.my.id/api/ai/copilot-think?text=' },
-    image: { type: String, default: 'https://api.siputzx.my.id/api/ai/magicstudio?prompt=' }
+    chat: { type: String, default: 'https://api.yupra.my.id/api/ai/gpt5' },
+    think: { type: String, default: 'https://api.yupra.my.id/api/ai/copilot-think' },
+    image: { type: String, default: 'https://api.siputzx.my.id/api/ai/magicstudio' }
   }
 });
 
@@ -75,11 +75,11 @@ const AdminSettings = mongoose.model('AdminSettings', AdminSettingsSchema);
 
 // Middleware
 app.use(cors({
-  origin: ['https://sila-ai.onrender.com', 'http://localhost:3000'],
+  origin: ['https://sila-ai.onrender.com', 'http://localhost:3000', 'http://localhost:5500'],
   credentials: true
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 app.use(session({
   secret: 'sila_ai_secret_key_2026_v2',
@@ -87,12 +87,12 @@ app.use(session({
   saveUninitialized: true,
   store: MongoStore.create({
     mongoUrl: MONGODB_URI,
-    ttl: 24 * 60 * 60 // 1 day
+    ttl: 24 * 60 * 60
   }),
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
+    secure: false // Set to true in production
   }
 }));
 
@@ -107,13 +107,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ 
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server Error:', err);
   res.status(500).json({ 
+    success: false,
     error: 'Hitilafu ya mtandao imetokea', 
     details: process.env.NODE_ENV === 'development' ? err.message : undefined 
   });
@@ -126,21 +127,30 @@ const auth = async (req, res, next) => {
                   req.session.token;
     
     if (!token) {
-      return res.status(401).json({ error: 'Tafadhali ingia kwanza' });
+      return res.status(401).json({ 
+        success: false,
+        error: 'Tafadhali ingia kwanza' 
+      });
     }
     
     const decoded = jwt.verify(token, 'sila_ai_jwt_secret_2026');
     const user = await User.findById(decoded.userId);
     
     if (!user) {
-      return res.status(401).json({ error: 'Mtumiaji huyu hayupo' });
+      return res.status(401).json({ 
+        success: false,
+        error: 'Mtumiaji huyu hayupo' 
+      });
     }
     
     req.user = user;
     req.token = token;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Hitilafu ya uthibitishaji' });
+    res.status(401).json({ 
+      success: false,
+      error: 'Hitilafu ya uthibitishaji' 
+    });
   }
 };
 
@@ -152,8 +162,8 @@ app.post('/admin/login', async (req, res) => {
     
     if (!settings || pin !== settings.adminPin) {
       return res.status(401).json({ 
-        error: 'Pini ya admin sio sahihi',
-        success: false 
+        success: false,
+        error: 'Pini ya admin sio sahihi'
       });
     }
     
@@ -169,29 +179,41 @@ app.post('/admin/login', async (req, res) => {
       message: 'Umeingia kwenye admin panel'
     });
   } catch (error) {
-    res.status(500).json({ error: 'Hitilafu ya mtandao' });
+    res.status(500).json({ 
+      success: false,
+      error: 'Hitilafu ya mtandao' 
+    });
   }
 });
 
 // Admin middleware
-const adminAuth = (req, res, next) => {
+const adminAuth = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '') || 
-                  req.session.adminToken;
+                  req.query.token;
     
     if (!token) {
-      return res.status(401).json({ error: 'Una hitaji ruhusa ya admin' });
+      return res.status(401).json({ 
+        success: false,
+        error: 'Una hitaji ruhusa ya admin' 
+      });
     }
     
     const decoded = jwt.verify(token, 'sila_admin_secret_2026');
     
     if (!decoded.admin || Date.now() - decoded.timestamp > 24 * 60 * 60 * 1000) {
-      return res.status(401).json({ error: 'Muda wa ruhusa umekwisha' });
+      return res.status(401).json({ 
+        success: false,
+        error: 'Muda wa ruhusa umekwisha' 
+      });
     }
     
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Hitilafu ya uthibitishaji wa admin' });
+    res.status(401).json({ 
+      success: false,
+      error: 'Hitilafu ya uthibitishaji wa admin' 
+    });
   }
 };
 
@@ -210,12 +232,14 @@ app.post('/api/register', async (req, res) => {
     // Validate input
     if (!username || !email || !password) {
       return res.status(400).json({ 
+        success: false,
         error: 'Tafadhali jaza sehemu zote' 
       });
     }
     
     if (password.length < 6) {
       return res.status(400).json({ 
+        success: false,
         error: 'Nenosiri lazima liwe na angalau herufi 6' 
       });
     }
@@ -227,6 +251,7 @@ app.post('/api/register', async (req, res) => {
     
     if (existingUser) {
       return res.status(400).json({ 
+        success: false,
         error: existingUser.email === email.toLowerCase() 
           ? 'Barua pepe tayari imetumika' 
           : 'Jina la mtumiaji tayari lipo' 
@@ -252,10 +277,6 @@ app.post('/api/register', async (req, res) => {
       email: user.email 
     }, 'sila_ai_jwt_secret_2026', { expiresIn: '30d' });
     
-    // Store in session
-    req.session.userId = user._id;
-    req.session.token = token;
-    
     res.status(201).json({
       success: true,
       message: 'Akaunti imeundwa kikamilifu',
@@ -271,6 +292,7 @@ app.post('/api/register', async (req, res) => {
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ 
+      success: false,
       error: 'Hitilafu ya mtandao imetokea. Tafadhali jaribu tena.' 
     });
   }
@@ -282,6 +304,7 @@ app.post('/api/login', async (req, res) => {
     
     if (!email || !password) {
       return res.status(400).json({ 
+        success: false,
         error: 'Tafadhali jaza barua pepe na nenosiri' 
       });
     }
@@ -289,6 +312,7 @@ app.post('/api/login', async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(400).json({ 
+        success: false,
         error: 'Barua pepe au nenosiri sio sahihi' 
       });
     }
@@ -296,6 +320,7 @@ app.post('/api/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ 
+        success: false,
         error: 'Barua pepe au nenosiri sio sahihi' 
       });
     }
@@ -304,14 +329,6 @@ app.post('/api/login', async (req, res) => {
       userId: user._id,
       email: user.email 
     }, 'sila_ai_jwt_secret_2026', { expiresIn: '30d' });
-    
-    // Update last login
-    user.lastLogin = Date.now();
-    await user.save();
-    
-    // Store in session
-    req.session.userId = user._id;
-    req.session.token = token;
     
     res.json({
       success: true,
@@ -328,130 +345,13 @@ app.post('/api/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ 
+      success: false,
       error: 'Hitilafu ya mtandao imetokea' 
     });
   }
 });
 
-app.post('/api/forgot-password', async (req, res) => {
-  try {
-    const { email } = req.body;
-    
-    if (!email) {
-      return res.status(400).json({ 
-        error: 'Tafadhali weka barua pepe yako' 
-      });
-    }
-    
-    const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) {
-      // Return success even if email not found (security best practice)
-      return res.json({ 
-        success: true,
-        message: 'Ikiwa barua pepe iko kwenye mfumo, maelekezo yatatumwa.' 
-      });
-    }
-    
-    // Generate reset token
-    const resetToken = jwt.sign(
-      { userId: user._id, purpose: 'password_reset' },
-      'sila_reset_secret_2026',
-      { expiresIn: '1h' }
-    );
-    
-    // In production, send email here
-    // For now, return the token (in production, send via email)
-    res.json({
-      success: true,
-      message: 'Maelekezo ya kubadilisha nenosiri yatatumwa kwenye email yako',
-      resetToken: process.env.NODE_ENV === 'development' ? resetToken : undefined
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      error: 'Hitilafu ya mtandao imetokea' 
-    });
-  }
-});
-
-app.post('/api/reset-password', async (req, res) => {
-  try {
-    const { token, newPassword } = req.body;
-    
-    if (!token || !newPassword) {
-      return res.status(400).json({ 
-        error: 'Tafadhali jaza sehemu zote' 
-      });
-    }
-    
-    if (newPassword.length < 6) {
-      return res.status(400).json({ 
-        error: 'Nenosiri jipya lazima liwe na angalau herufi 6' 
-      });
-    }
-    
-    // Verify token
-    const decoded = jwt.verify(token, 'sila_reset_secret_2026');
-    
-    if (decoded.purpose !== 'password_reset') {
-      return res.status(400).json({ 
-        error: 'Tokeni sio sahihi' 
-      });
-    }
-    
-    const user = await User.findById(decoded.userId);
-    if (!user) {
-      return res.status(404).json({ 
-        error: 'Mtumiaji huyu hayupo' 
-      });
-    }
-    
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-    user.password = hashedPassword;
-    await user.save();
-    
-    res.json({ 
-      success: true,
-      message: 'Nenosiri limebadilishwa kikamilifu' 
-    });
-  } catch (error) {
-    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-      return res.status(400).json({ 
-        error: 'Tokeni imekwisha au sio sahihi' 
-      });
-    }
-    res.status(500).json({ 
-      error: 'Hitilafu ya mtandao imetokea' 
-    });
-  }
-});
-
-app.post('/api/update-language', auth, async (req, res) => {
-  try {
-    const { language } = req.body;
-    
-    if (!['sw', 'en', 'fr', 'es', 'ar'].includes(language)) {
-      return res.status(400).json({ 
-        error: 'Lugha hii haiungwi mkono' 
-      });
-    }
-    
-    req.user.language = language;
-    await req.user.save();
-    
-    res.json({
-      success: true,
-      message: 'Lugha imesasishwa',
-      language
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      error: 'Hitilafu ya mtandao imetokea' 
-    });
-  }
-});
-
-// 2. Chat & AI Functions
+// 2. Chat & AI Functions - FIXED APIs
 app.post('/api/chat', auth, async (req, res) => {
   try {
     const { message, sessionId, generateImage, language = req.user.language || 'sw' } = req.body;
@@ -460,6 +360,7 @@ app.post('/api/chat', auth, async (req, res) => {
     // Validate message
     if (!message || message.trim().length === 0) {
       return res.status(400).json({ 
+        success: false,
         error: 'Tafadhali andika ujumbe' 
       });
     }
@@ -490,37 +391,66 @@ app.post('/api/chat', auth, async (req, res) => {
     
     try {
       if (generateImage) {
-        // Generate image
-        const imageResponse = await axios.get(
-          `https://api.siputzx.my.id/api/ai/magicstudio?prompt=${encodeURIComponent(message)}`,
-          { timeout: 30000 }
+        // Generate image - FIXED API CALL
+        const imageResponse = await axios.post(
+          'https://api.siputzx.my.id/api/ai/magicstudio',
+          { prompt: message },
+          { 
+            timeout: 60000,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
         );
         
-        imageUrl = imageResponse.data;
+        // Extract image URL from response
+        imageUrl = imageResponse.data?.image || imageResponse.data?.url || 
+                  (typeof imageResponse.data === 'string' ? imageResponse.data : null);
+        
+        if (!imageUrl) {
+          throw new Error('Hakuna picha iliyotengenezwa');
+        }
+        
         aiResponse = `[Picha imetengenezwa kwa: "${message}"]`;
         
       } else {
-        // Get thinking response
-        let thinkResponse;
-        try {
-          thinkResponse = await axios.get(
-            `https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(message)}`,
-            { timeout: 30000 }
-          );
-        } catch (thinkError) {
-          console.warn('Think API failed, using direct chat:', thinkError.message);
-          thinkResponse = { data: '' };
-        }
-        
-        // Get chat response
-        const chatResponse = await axios.get(
-          `https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(
-            thinkResponse.data ? thinkResponse.data + ' ' + message : message
-          )}`,
-          { timeout: 30000 }
+        // Get AI response - FIXED API CALL
+        const chatResponse = await axios.post(
+          'https://api.yupra.my.id/api/ai/gpt5',
+          { text: message },
+          { 
+            timeout: 30000,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
         );
         
-        aiResponse = chatResponse.data;
+        // Extract response text
+        aiResponse = chatResponse.data?.response || chatResponse.data?.text || 
+                    chatResponse.data?.message || 
+                    (typeof chatResponse.data === 'string' ? chatResponse.data : 'Nimeshindwa kujibu.');
+        
+        // If no response, try with think API
+        if (!aiResponse || aiResponse.includes('Nimeshindwa')) {
+          const thinkResponse = await axios.post(
+            'https://api.yupra.my.id/api/ai/copilot-think',
+            { text: message },
+            { 
+              timeout: 30000,
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              }
+            }
+          );
+          
+          aiResponse = thinkResponse.data?.response || thinkResponse.data?.text || 
+                      thinkResponse.data?.message || 
+                      (typeof thinkResponse.data === 'string' ? thinkResponse.data : 'Nimeshindwa kujibu.');
+        }
       }
       
       // Add AI response
@@ -559,7 +489,7 @@ app.post('/api/chat', auth, async (req, res) => {
       
       await conversation.save();
       
-      res.status(503).json({
+      res.json({
         success: false,
         response: fallbackResponse,
         error: 'AI service temporarily unavailable'
@@ -568,7 +498,7 @@ app.post('/api/chat', auth, async (req, res) => {
     
   } catch (error) {
     console.error('Chat error:', error);
-    const errorMessage = req.user.language === 'sw'
+    const errorMessage = req.user?.language === 'sw'
       ? 'Hitilafu ya mtandao imetokea. Tafadhali jaribu tena.'
       : 'Network error occurred. Please try again.';
     
@@ -584,7 +514,7 @@ app.get('/api/conversations', auth, async (req, res) => {
   try {
     const conversations = await Conversation.find({ userId: req.user._id })
       .sort({ updatedAt: -1 })
-      .select('title sessionId createdAt updatedAt')
+      .select('title sessionId createdAt updatedAt messages')
       .limit(50);
     
     res.json({
@@ -599,17 +529,25 @@ app.get('/api/conversations', auth, async (req, res) => {
   }
 });
 
+// Get single conversation with all messages (For Admin)
 app.get('/api/conversation/:sessionId', auth, async (req, res) => {
   try {
     const conversation = await Conversation.findOne({
-      userId: req.user._id,
       sessionId: req.params.sessionId
-    });
+    }).populate('userId', 'username email');
     
     if (!conversation) {
       return res.status(404).json({ 
         success: false,
         error: 'Mazungumzo hayajapatikana' 
+      });
+    }
+    
+    // Check if user is admin or owns the conversation
+    if (!req.user.isAdmin && conversation.userId._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ 
+        success: false,
+        error: 'Huna ruhusa ya kuona mazungumzo haya' 
       });
     }
     
@@ -654,19 +592,25 @@ app.post('/api/upload', auth, upload.single('file'), (req, res) => {
   }
 });
 
-// 5. Admin Panel APIs
+// 5. Admin Panel APIs - ENHANCED
 app.get('/api/admin/stats', adminAuth, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalConversations = await Conversation.countDocuments();
     const activeUsers = await User.countDocuments({
-      lastLogin: { $gt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+      createdAt: { $gt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
     });
     
     const users = await User.find()
       .select('-password')
       .sort({ createdAt: -1 })
       .limit(100);
+    
+    // Get all conversations for admin
+    const allConversations = await Conversation.find()
+      .populate('userId', 'username email')
+      .sort({ updatedAt: -1 })
+      .limit(50);
     
     res.json({
       success: true,
@@ -678,7 +622,98 @@ app.get('/api/admin/stats', adminAuth, async (req, res) => {
           createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }
         })
       },
-      users
+      users,
+      conversations: allConversations
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Hitilafu ya mtandao imetokea' 
+    });
+  }
+});
+
+// Get user conversations (For Admin)
+app.get('/api/admin/user/:userId/conversations', adminAuth, async (req, res) => {
+  try {
+    const conversations = await Conversation.find({ userId: req.params.userId })
+      .sort({ updatedAt: -1 })
+      .populate('userId', 'username email');
+    
+    res.json({
+      success: true,
+      conversations
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Hitilafu ya mtandao imetokea' 
+    });
+  }
+});
+
+// Get user details with password (For Admin only)
+app.get('/api/admin/user/:userId/details', adminAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    
+    if (!user) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Mtumiaji huyu hayupo' 
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        language: user.language,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt,
+        // Include password (hashed)
+        password: user.password
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Hitilafu ya mtandao imetokea' 
+    });
+  }
+});
+
+// Update user password (For Admin)
+app.post('/api/admin/user/:userId/update-password', adminAuth, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Nenosiri lazima liwe na angalau herufi 6' 
+      });
+    }
+    
+    const user = await User.findById(req.params.userId);
+    
+    if (!user) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Mtumiaji huyu hayupo' 
+      });
+    }
+    
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPassword;
+    await user.save();
+    
+    res.json({
+      success: true,
+      message: 'Nenosiri limebadilishwa kikamilifu'
     });
   } catch (error) {
     res.status(500).json({ 
@@ -720,58 +755,13 @@ app.post('/api/admin/update-pin', adminAuth, async (req, res) => {
   }
 });
 
-app.post('/api/admin/update-user', adminAuth, async (req, res) => {
-  try {
-    const { userId, updates } = req.body;
-    
-    if (!userId || !updates) {
-      return res.status(400).json({ 
-        success: false,
-        error: 'Data haijakamilika' 
-      });
-    }
-    
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ 
-        success: false,
-        error: 'Mtumiaji huyu hayupo' 
-      });
-    }
-    
-    // Update allowed fields
-    if (updates.username) user.username = updates.username;
-    if (updates.email) user.email = updates.email.toLowerCase();
-    if (updates.language) user.language = updates.language;
-    if (updates.isAdmin !== undefined) user.isAdmin = updates.isAdmin;
-    
-    await user.save();
-    
-    res.json({
-      success: true,
-      message: 'Taarifa za mtumiaji zimesasishwa',
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        language: user.language,
-        isAdmin: user.isAdmin
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false,
-      error: 'Hitilafu ya mtandao imetokea' 
-    });
-  }
-});
-
 // 6. Health Check
 app.get('/api/health', (req, res) => {
   res.json({ 
+    success: true,
     status: 'healthy',
     timestamp: new Date(),
-    version: '2.0.0'
+    version: '3.0.0'
   });
 });
 
@@ -807,14 +797,6 @@ io.on('connection', (socket) => {
     socket.join(sessionId);
   });
   
-  socket.on('chat-message', (data) => {
-    io.to(data.sessionId).emit('new-message', data);
-  });
-  
-  socket.on('typing', (data) => {
-    socket.to(data.sessionId).emit('user-typing', data);
-  });
-  
   socket.on('disconnect', () => {
     console.log('🔌 Mteja amekatika');
   });
@@ -825,5 +807,5 @@ server.listen(PORT, async () => {
   await initializeAdmin();
   console.log(`🚀 Sila AI server inatumika kwenye port ${PORT}`);
   console.log(`🌐 Unganisha: http://localhost:${PORT}`);
-  console.log(`👑 Admin Panel: http://localhost:${PORT}/admin`);
+  console.log(`👑 Admin Panel: http://localhost:${PORT}/admin?token=ADMIN_TOKEN_HERE`);
 });
