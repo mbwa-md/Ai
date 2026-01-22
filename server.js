@@ -63,8 +63,8 @@ const AdminSettingsSchema = new mongoose.Schema({
   aiName: { type: String, default: 'Sila AI' },
   aiPersonality: { type: String, default: 'Ninasema Kiswahili na Kiingereza, ni msaidizi wenye uelewa mkuu, mwenye huruma na ufasaha.' },
   apiEndpoints: {
-    chat: { type: String, default: 'https://api.yupra.my.id/api/ai/gpt5' },
-    think: { type: String, default: 'https://api.yupra.my.id/api/ai/copilot-think' },
+    chat: { type: String, default: 'https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(q.trim())}' },
+    think: { type: String, default: 'https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(q.trim())}' },
     image: { type: String, default: 'https://api.siputzx.my.id/api/ai/magicstudio' }
   }
 });
@@ -417,7 +417,7 @@ app.post('/api/chat', auth, async (req, res) => {
       } else {
         // Get AI response - FIXED API CALL
         const chatResponse = await axios.post(
-          'https://api.yupra.my.id/api/ai/gpt5',
+          'https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(q.trim())}',
           { text: message },
           { 
             timeout: 30000,
@@ -436,7 +436,7 @@ app.post('/api/chat', auth, async (req, res) => {
         // If no response, try with think API
         if (!aiResponse || aiResponse.includes('Nimeshindwa')) {
           const thinkResponse = await axios.post(
-            'https://api.yupra.my.id/api/ai/copilot-think',
+            'https://api.yupra.my.id/api/ai/copilot-think?text=${encodeURIComponent(q.trim())}',
             { text: message },
             { 
               timeout: 30000,
